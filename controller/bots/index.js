@@ -8,7 +8,7 @@ module.exports = {
 
 		console.log(token)
 
-		console.log(req)
+		console.log(req.body)
 
 		return res.send('true')
 	}
