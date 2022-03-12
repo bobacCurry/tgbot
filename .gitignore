@@ -1,0 +1,15 @@
+node_modules/
+
+static/
+
+log/
+
+.tlg/
+
+.env
+
+yarn.lock
+
+tlg.log
+
+lib/
