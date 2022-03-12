@@ -6,8 +6,6 @@ module.exports = {
 
 		const token = req.params.token
 
-		console.log(token)
-
 		console.log(req.body)
 
 		return res.send('true')

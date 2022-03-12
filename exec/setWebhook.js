@@ -2,6 +2,8 @@ const axios = require('axios')
 
 const { botUrl, env } = require('../config')
 
+const TYPELIST = ['admin','hh_static'] 
+
 if (!process.argv[2]) {
 
 	console.log('please input the token')
@@ -9,13 +11,23 @@ if (!process.argv[2]) {
 	process.exit(1)
 }
 
+if (!process.argv[3]) {
+
+	console.log('please input the type')
+
+	process.exit(1)
+}
+
+
 const token = process.argv[2]
+
+const type = TYPELIST[process.argv[3]]
 
 const main = async () => {
 
 	try{
 
-		const url = env.apiUrl + 'bots/' + token
+		const url = env.apiUrl + 'bots/' + type + '/' + token
 
 		const allowed_updates = ['message','inline_query','callback_query','chat_join_request']
 
