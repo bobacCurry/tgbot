@@ -4,6 +4,6 @@ const router = express.Router()
 
 const bots = require('../controller/bots/index.js')
 
-router.get('/:token', bots.index)
+router.post('/:token', bots.index)
 
 module.exports = router

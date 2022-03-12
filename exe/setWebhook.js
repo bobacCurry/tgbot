@@ -15,7 +15,7 @@ const main = async () => {
 
 	try{
 
-		const url = env.apiUrl + 'bots/'
+		const url = env.apiUrl + 'bots'
 
 		const allowed_updates = ['message','inline_query','callback_query','chat_join_request']
 
