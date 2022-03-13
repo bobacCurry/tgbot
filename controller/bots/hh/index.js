@@ -45,42 +45,42 @@ const isIn = async (text) => {
 
 const setAdmin = async (from,chat,text) => {
 
-	console.log(from,chat,text)
+	console.log(from,chat,text,1)
 }
 
 const delAdmin = async (from,chat,text) => {
 
-	console.log(from,chat,text)
+	console.log(from,chat,text,2)
 }
 
 const setOperator = async (from,chat,text) => {
 	
-	console.log(from,chat,text)	
+	console.log(from,chat,text,3)	
 }
 
 const delOperator = async (from,chat,text) => {
 
-	console.log(from,chat,text)
+	console.log(from,chat,text,4)
 }
 
 const setRate = async (from,chat,text) => {
 
-	console.log(from,chat,text)	
+	console.log(from,chat,text,5)	
 }
 
 const setCharge = async (from,chat,text) => {
 
-	console.log(from,chat,text)	
+	console.log(from,chat,text,6)	
 }
 
 const setOut = async (from,chat,text) => {
 
-	console.log(from,chat,text)
+	console.log(from,chat,text,7)
 }
 
 const setIn = async (from,chat,text) => {
 
-	console.log(from,chat,text)
+	console.log(from,chat,text,8)
 }
 
 module.exports = {
@@ -93,42 +93,42 @@ module.exports = {
 
 		if (isCommand(text,'set_admin')) {
 
-			await setAdmin(from,chat,text,1)
+			await setAdmin(from,chat,text)
 		}
 
 		if (isCommand(text,'del_admin')) {
 
-			await delAdmin(from,chat,text,2)
+			await delAdmin(from,chat,text)
 		}
 
 		if (isCommand(text,'set_operator')) {
 
-			await setOperator(from,chat,text,3)
+			await setOperator(from,chat,text)
 		}
 
 		if (isCommand(text,'del_operator')) {
 
-			await delOperator(from,chat,text,4)
+			await delOperator(from,chat,text)
 		}
 
 		if (isCommand(text,'set_rate')) {
 
-			await setRate(from,chat,text,5)
+			await setRate(from,chat,text)
 		}
 
 		if (isCommand(text,'set_charge')) {
 
-			await setCharge(from,chat,text,6)
+			await setCharge(from,chat,text)
 		}
 
 		if (isOut(text)) {
 
-			await setOut(from,chat,text,7)
+			await setOut(from,chat,text)
 		}
 
 		if (isIn(text)) {
 
-			await setIn(from,chat,text,8)
+			await setIn(from,chat,text)
 		}
 
 		return res.send('true')
