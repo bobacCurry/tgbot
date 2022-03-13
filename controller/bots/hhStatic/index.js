@@ -73,12 +73,12 @@ const setCharge = async (from,chat,text) => {
 	console.log(from,chat,text)	
 }
 
-const setOut = async (from,chat,text) => {
+const out = async (from,chat,text) => {
 
 	console.log(from,chat,text)
 }
 
-const setIn = async (from,chat,text) => {
+const in = async (from,chat,text) => {
 
 	console.log(from,chat,text)
 }
@@ -93,42 +93,42 @@ module.exports = {
 
 		if (isCommand(text,'set_admin')) {
 
-			await setAdmin()
+			await setAdmin(from,chat,text)
 		}
 
 		if (isCommand(text,'del_admin')) {
 
-			await delAdmin()
+			await delAdmin(from,chat,text)
 		}
 
 		if (isCommand(text,'set_operator')) {
 
-			await setOperator()
+			await setOperator(from,chat,text)
 		}
 
 		if (isCommand(text,'del_operator')) {
 
-			await delOperator()
+			await delOperator(from,chat,text)
 		}
 
 		if (isCommand(text,'set_rate')) {
 
-			await setRate()
+			await setRate(from,chat,text)
 		}
 
 		if (isCommand(text,'set_charge')) {
 
-			await setCharge()
+			await setCharge(from,chat,text)
 		}
 
 		if (isOut(text)) {
 
-			await out()
+			await out(from,chat,text)
 		}
 
 		if (isIn(text)) {
 
-			await in()
+			await in(from,chat,text)
 		}
 
 		return res.send('true')
