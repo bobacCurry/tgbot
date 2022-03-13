@@ -2,7 +2,7 @@ const axios = require('axios')
 
 const { botUrl, env } = require('../config')
 
-const TYPELIST = ['admin','hhStatic'] 
+const TYPELIST = ['admin','hh'] 
 
 if (!process.argv[2]) {
 
