@@ -91,42 +91,42 @@ module.exports = {
 
 		const { update_id, message: { message_id, from, chat, text } } = req.body
 
-		if (isCommand(text,'set_admin')) {
+		if (await isCommand(text,'/set_admin')) {
 
 			await setAdmin(from,chat,text)
 		}
 
-		if (isCommand(text,'del_admin')) {
+		if (await isCommand(text,'/del_admin')) {
 
 			await delAdmin(from,chat,text)
 		}
 
-		if (isCommand(text,'set_operator')) {
+		if (await isCommand(text,'/set_operator')) {
 
 			await setOperator(from,chat,text)
 		}
 
-		if (isCommand(text,'del_operator')) {
+		if (await isCommand(text,'/del_operator')) {
 
 			await delOperator(from,chat,text)
 		}
 
-		if (isCommand(text,'set_rate')) {
+		if (await isCommand(text,'/set_rate')) {
 
 			await setRate(from,chat,text)
 		}
 
-		if (isCommand(text,'set_charge')) {
+		if (await isCommand(text,'/set_charge')) {
 
 			await setCharge(from,chat,text)
 		}
 
-		if (isOut(text)) {
+		if (await isOut(text)) {
 
 			await setOut(from,chat,text)
 		}
 
-		if (isIn(text)) {
+		if (await isIn(text)) {
 
 			await setIn(from,chat,text)
 		}
