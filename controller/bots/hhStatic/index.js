@@ -73,12 +73,12 @@ const setCharge = async (from,chat,text) => {
 	console.log(from,chat,text)	
 }
 
-const out = async (from,chat,text) => {
+const setOut = async (from,chat,text) => {
 
 	console.log(from,chat,text)
 }
 
-const in = async (from,chat,text) => {
+const setIn = async (from,chat,text) => {
 
 	console.log(from,chat,text)
 }
@@ -123,12 +123,12 @@ module.exports = {
 
 		if (isOut(text)) {
 
-			await out(from,chat,text)
+			await setOut(from,chat,text)
 		}
 
 		if (isIn(text)) {
 
-			await in(from,chat,text)
+			await setIn(from,chat,text)
 		}
 
 		return res.send('true')
