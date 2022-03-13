@@ -93,42 +93,42 @@ module.exports = {
 
 		if (isCommand(text,'set_admin')) {
 
-			await setAdmin(from,chat,text)
+			await setAdmin(from,chat,text,1)
 		}
 
 		if (isCommand(text,'del_admin')) {
 
-			await delAdmin(from,chat,text)
+			await delAdmin(from,chat,text,2)
 		}
 
 		if (isCommand(text,'set_operator')) {
 
-			await setOperator(from,chat,text)
+			await setOperator(from,chat,text,3)
 		}
 
 		if (isCommand(text,'del_operator')) {
 
-			await delOperator(from,chat,text)
+			await delOperator(from,chat,text,4)
 		}
 
 		if (isCommand(text,'set_rate')) {
 
-			await setRate(from,chat,text)
+			await setRate(from,chat,text,5)
 		}
 
 		if (isCommand(text,'set_charge')) {
 
-			await setCharge(from,chat,text)
+			await setCharge(from,chat,text,6)
 		}
 
 		if (isOut(text)) {
 
-			await setOut(from,chat,text)
+			await setOut(from,chat,text,7)
 		}
 
 		if (isIn(text)) {
 
-			await setIn(from,chat,text)
+			await setIn(from,chat,text,8)
 		}
 
 		return res.send('true')
