@@ -43,6 +43,11 @@ const isIn = async (text) => {
 	return true
 }
 
+const start = async (from,chat,text) => {
+
+	console.log(from,chat,text,0)
+}
+
 const setAdmin = async (from,chat,text) => {
 
 	console.log(from,chat,text,1)
@@ -90,6 +95,11 @@ module.exports = {
 		const token = req.params.token
 
 		const { update_id, message: { message_id, from, chat, text } } = req.body
+
+		if (await isCommand(text,'/start')) {
+
+			await start(from,chat,text)
+		}
 
 		if (await isCommand(text,'/set_admin')) {
 
