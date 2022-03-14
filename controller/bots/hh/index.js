@@ -104,9 +104,9 @@ module.exports = {
 
 		const token = req.params.token
 
-		const { update_id, message: { message_id, from, chat, text } } = req.body
+		const { update_id, message: { message_id, from, chat, text, entities } } = req.body
 
-		console.log(req.body)
+		console.log(message_id, from, chat, text, entities)
 
 		if (await isCommand(text,'/start')) {
 
