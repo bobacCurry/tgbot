@@ -18,7 +18,7 @@ let opt = {}
 
 if (username) {
 	
-	opt = { auth:{ authSource: "admin", user: username, pass: password  } }
+	opt = { auth:{ authSource: "admin" }, username, password }
 }
 /**
  * 连接
