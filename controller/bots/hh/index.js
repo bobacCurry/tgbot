@@ -68,13 +68,15 @@ const start = async (token,message_id,from,chat,text) => {
 		5.设置费率：发送 <u>设置费率 X.XX</u> (例：设置费率 0.05)\n
 		6.设置汇率：发送 <u>设置汇率 币种X 汇率Y</u> (例：设置汇率 PHP 7.8)\n
 		
-		汇率 = 1RMB可以兑换的其他币种的值\n
+		⚠️汇率 = 1RMB可以兑换的其他币种的值\n
 
-		支持币种：人民币(RMB)、美元(USD)、披索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
+		⚠️支持币种：人民币(RMB)、美元(USD)、披索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
 
-		7.记录下发：发送 <u>下发 XXX Y币种</u>(默认为人民币) 或者 <u>-XXX Y币种</u>(默认为人民币)\n
+		7.记录下发：发送 <u>下发 XXX Y币种</u>(例：下发 200000 PHP) 或者 <u>-XXX Y币种</u>(例：-200000 PHP)\n
 
-		8.记录回款：发送 <u>回款 XXX Y币种</u>(默认为人民币) 或者 <u>+XXX Y币种</u>(默认为人民币)\n
+		8.记录回款：发送 <u>回款 XXX Y币种</u>(例：回款 200000 PHP) 或者 <u>+XXX Y币种</u>(例：+200000 PHP)\n
+
+		⚠️下发与回款，若不写币种则默认为人民币(RMB)
 	`
 
 	await API.sendMessage(token, { chat_id: cid, parse_mode: 'HTML', text: r_text })
