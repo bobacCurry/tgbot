@@ -4,7 +4,7 @@ const db_hh_water = require('../../../model/hh/water')
 
 const db_hh_user = require('../../../model/hh/user')
 
-const { botUrl } = require('../config')
+const { botUrl } = require('../../../config')
 
 const axios = require('axios')
 
