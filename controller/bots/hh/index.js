@@ -4,7 +4,7 @@ const db_hh_water = require('../../../model/hh/water')
 
 const db_hh_user = require('../../../model/hh/user')
 
-const { botUrl } = require('../../../config')
+const { botUrl, env: { ownerId } } = require('../../../config')
 
 const axios = require('axios')
 
@@ -58,6 +58,16 @@ const start = async (from,chat,text) => {
 	console.log(from,chat,text,0)
 }
 
+const applyAdmin = async (from,chat,text) => {
+
+	console.log(from,chat,text,1)
+}
+
+const getApplyAdmin = async (from,chat,text) => {
+
+	console.log(from,chat,text,1)
+}
+
 const setAdmin = async (from,chat,text) => {
 
 	console.log(from,chat,text,1)
@@ -66,6 +76,16 @@ const setAdmin = async (from,chat,text) => {
 const delAdmin = async (from,chat,text) => {
 
 	console.log(from,chat,text,2)
+}
+
+const applyOperator = async (from,chat,text) => {
+	
+	console.log(from,chat,text,3)	
+}
+
+const getApplyOperator = async (from,chat,text) => {
+	
+	console.log(from,chat,text,3)	
 }
 
 const setOperator = async (from,chat,text) => {
@@ -113,6 +133,16 @@ module.exports = {
 			await start(from,chat,text)
 		}
 
+		if (await isCommand(text,'/apply_admin')) {
+
+			await applyAdmin(from,chat,text)
+		}
+
+		if (await isCommand(text,'/get_apply_admin')) {
+
+			await getApplyAdmin(from,chat,text)
+		}
+
 		if (await isCommand(text,'/set_admin')) {
 
 			await setAdmin(from,chat,text)
@@ -121,6 +151,11 @@ module.exports = {
 		if (await isCommand(text,'/del_admin')) {
 
 			await delAdmin(from,chat,text)
+		}
+
+		if (await isCommand(text,'/apply_operator')) {
+
+			await applyOperator(from,chat,text)
 		}
 
 		if (await isCommand(text,'/set_operator')) {

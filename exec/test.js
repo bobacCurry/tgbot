@@ -8,7 +8,7 @@ const main = async () => {
 
 	try{
 
-		const params = { chat_id: 1815214666 }
+		const params = { chat_id: 1745712525 }
 
 		const { data } = await axios.post(`${botUrl}${token}/getChat`,params)
 
@@ -16,9 +16,9 @@ const main = async () => {
 
 		process.exit(1)
 
-	}catch(err){
+	}catch({ response }){
 
-		console.log(err)
+		console.log(response.data)
 		
 		process.exit(1)
 	}
