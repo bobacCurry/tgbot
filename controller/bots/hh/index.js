@@ -53,67 +53,116 @@ const isIn = async (text) => {
 	return true
 }
 
-const start = async (from,chat,text) => {
+const start = async (message_id,from,chat,text) => {
 
-	console.log(from,chat,text,0)
+	const { id: uid, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	const r_text = `
+		换汇统计命令：\n
+		1.申请成为管理员：发送 <a>申请管理员</a>\n
+		2.申请成为操作员：发送 <a>申请操作员</a>\n
+		3.获取操作员申请：发送 <a>操作员申请</a>\n
+		4.获取操作员列表：发送 <a>操作员列表</a>\n
+		5.设置费率：发送 <a>设置费率 X.XX (例：设置费率 0.05)</a>\n
+		6.设置汇率：发送 <a>设置汇率 币种X 汇率Y (设置汇率 PHP 7.8)</a>\n
+		
+		汇率 = 1RMB可以兑换的其他币种的值
+
+		支持币种：人民币(RMB)、美元(USD)、披索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)
+
+		7.记录下发：发送 <a>下发 XXX Y币种(默认为人民币)</a> 或者 <a>-XXX Y币种(默认为人民币)</a>
+
+		8.记录回款：发送 <a>回款 XXX Y币种(默认为人民币)</a> 或者 <a>+XXX Y币种(默认为人民币)</a>
+	`
+
+	await API.sendMessage({ chat_id: cid, parse_mode: 'HTML', text: r_text })
 }
 
-const applyAdmin = async (from,chat,text) => {
+const applyAdmin = async (message_id,from,chat,text) => {
+
+	const { id: uid, is_bot } = from
+
+	if (is_bot) {
+
+		return false
+	}
+}
+
+const getApplyAdmin = async (message_id,from,chat,text) => {
 
 	console.log(from,chat,text,1)
 }
 
-const getApplyAdmin = async (from,chat,text) => {
+const setAdmin = async (message_id,from,chat,text) => {
 
-	console.log(from,chat,text,1)
+	const { id: uid, is_bot } = from
+
+	if (is_bot) {
+
+		return false
+	}
+
+	if (id!==ownerId) {
+
+	}
+
+	return true
 }
 
-const setAdmin = async (from,chat,text) => {
-
-	console.log(from,chat,text,1)
-}
-
-const delAdmin = async (from,chat,text) => {
+const delAdmin = async (message_id,from,chat,text) => {
 
 	console.log(from,chat,text,2)
 }
 
-const applyOperator = async (from,chat,text) => {
+const applyOperator = async (message_id,from,chat,text) => {
+	
+
+	const { id: uid, is_bot } = from
+
+	if (is_bot) {
+
+		return false
+	}
+
+	return
+}
+
+const getApplyOperator = async (message_id,from,chat,text) => {
 	
 	console.log(from,chat,text,3)	
 }
 
-const getApplyOperator = async (from,chat,text) => {
+const setOperator = async (message_id,from,chat,text) => {
 	
-	console.log(from,chat,text,3)	
+	const { id: uid, is_bot } = from
+
+	const { id: cid, type } = chat
+
 }
 
-const setOperator = async (from,chat,text) => {
-	
-	console.log(from,chat,text,3)	
-}
-
-const delOperator = async (from,chat,text) => {
+const delOperator = async (message_id,from,chat,text) => {
 
 	console.log(from,chat,text,4)
 }
 
-const setRate = async (from,chat,text) => {
+const setRate = async (message_id,from,chat,text) => {
 
 	console.log(from,chat,text,5)	
 }
 
-const setCharge = async (from,chat,text) => {
+const setCharge = async (message_id,from,chat,text) => {
 
-	console.log(from,chat,text,6)	
+	console.log(from,chat,text,6)
 }
 
-const setOut = async (from,chat,text) => {
+const setOut = async (message_id,from,chat,text) => {
 
 	console.log(from,chat,text,7)
 }
 
-const setIn = async (from,chat,text) => {
+const setIn = async (message_id,from,chat,text) => {
 
 	console.log(from,chat,text,8)
 }
@@ -126,66 +175,76 @@ module.exports = {
 
 		const { update_id, message: { message_id, from, chat, text, entities } } = req.body
 
-		console.log(message_id, from, chat, text, entities)
+		console.log(req.body)
 
 		if (await isCommand(text,'/start')) {
 
-			await start(from,chat,text)
+			await start(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/apply_admin')) {
+		if (await isCommand(text,'申请管理员')) {
 
-			await applyAdmin(from,chat,text)
+			await applyAdmin(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/get_apply_admin')) {
+		if (await isCommand(text,'获取管理员')) {
 
-			await getApplyAdmin(from,chat,text)
+			await getApplyAdmin(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/set_admin')) {
+		if (await isCommand(text,'设置管理员')) {
 
-			await setAdmin(from,chat,text)
+			await setAdmin(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/del_admin')) {
+		if (await isCommand(text,'删除管理员')) {
 
-			await delAdmin(from,chat,text)
+			await delAdmin(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/apply_operator')) {
+		if (await isCommand(text,'申请操作员')) {
 
-			await applyOperator(from,chat,text)
+			await applyOperator(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/set_operator')) {
+		if (await isCommand(text,'设置操作员')) {
 
-			await setOperator(from,chat,text)
+			await setOperator(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/del_operator')) {
+		if (await isCommand(text,'删除操作员')) {
 
-			await delOperator(from,chat,text)
+			await delOperator(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/set_rate')) {
+		if (await isCommand(text,'设置费率')) {
 
-			await setRate(from,chat,text)
+			await setRate(message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/set_charge')) {
+		if (await isCommand(text,'设置汇率')) {
 
-			await setCharge(from,chat,text)
+			await setCharge(message_id,from,chat,text)
+		}
+
+		if (await isCommand(text,'下发')) {
+
+			await setOut(message_id,from,chat,text)
+		}
+
+		if (await isCommand(text,'回款')) {
+
+			await setIn(message_id,from,chat,text)
 		}
 
 		if (await isOut(text)) {
 
-			await setOut(from,chat,text)
+			await setOut(message_id,from,chat,text)
 		}
 
 		if (await isIn(text)) {
 
-			await setIn(from,chat,text)
+			await setIn(message_id,from,chat,text)
 		}
 
 		return res.send('true')
