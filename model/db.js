@@ -14,28 +14,14 @@ const dbname = config.env.dbname
 
 let url = `mongodb://${dbhost}:${dbport}/${dbname}`
 
-let opt = {
-  	useNewUrlParser: true,
-  	useCreateIndex: true,
-  	useFindAndModify:false,
-   	useUnifiedTopology: true
-}
+let opt = {}
 
 if (username) {
 	
 	url = `mongodb://${username}:${password}@${dbhost}:${dbport}/${dbname}`
 
-	opt = {
-		auth:{
-			authSource:"admin"
-		},
-	  	useNewUrlParser: true,
-	  	useCreateIndex: true,
-	  	useFindAndModify:false,
-	   	useUnifiedTopology: true
-	}
+	opt = { auth:{ authSource:"admin" } }
 }
-
 /**
  * 连接
  */

@@ -1,4 +1,14 @@
+const db_hh_config = require('../../../model/hh/config')
+
+const db_hh_water = require('../../../model/hh/water')
+
+const db_hh_user = require('../../../model/hh/user')
+
+const { botUrl } = require('../config')
+
 const axios = require('axios')
+
+const API = require('../api')
 
 const ROLELIST = ['owner','admin','operator']
 
@@ -95,6 +105,8 @@ module.exports = {
 		const token = req.params.token
 
 		const { update_id, message: { message_id, from, chat, text } } = req.body
+
+		console.log(req.body)
 
 		if (await isCommand(text,'/start')) {
 

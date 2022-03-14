@@ -20,7 +20,7 @@ const User = new Schema({
 
 	type: { type: String, default: '' },
 
-	expire:: { type: Number, default: 0 },
+	expire: { type: Number, default: 0 },
 
 	created_at: { type: Date },
 
