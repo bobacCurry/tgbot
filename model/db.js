@@ -20,7 +20,7 @@ if (username) {
 	
 	url = `mongodb://${username}:${password}@${dbhost}:${dbport}/${dbname}`
 
-	opt = { auth:{ authSource:"admin" } }
+	opt = { auth:{ authSource:"admin", username, password  } }
 }
 /**
  * 连接
