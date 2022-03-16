@@ -4,15 +4,17 @@ const Schema = mongoose.Schema
 
 const Water = new Schema({
 
-	gid: { type: Number, default: 0 },
+	cid: { type: Number, required: true, index: true },
 
-	uid: { type: Number, default: 0 },
+	uid: { type: Number, required: true, index: true },
+
+	name: { type: String, required: true },
 
 	charge: { type: Number, default: 0 },
 
 	rate: { type: Number, default: 0 },
 
-	current: { type: String, default: '' },
+	currency: { type: String, default: '' },
 
 	in: { type: Number, default: 0 },
 

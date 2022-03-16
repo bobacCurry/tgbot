@@ -12,7 +12,7 @@ const API = require('../api')
 
 const ROLELIST = ['owner','admin','operator']
 
-const CURRENTS = { 'RMB': '人民币','USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
+const CURRENCY = { 'RMB': '人民币','USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
 
 const isCommand  = async (text,command) => {
 
@@ -60,23 +60,32 @@ const start = async (token,message_id,from,chat,text) => {
 	const { id: cid, type } = chat
 
 	const r_text = `
-		换汇统计命令：\n
-		1.申请成为管理员：发送 <u>申请管理员</u>\n
-		2.申请成为操作员：发送 <u>申请操作员</u>\n
-		3.获取操作员申请：发送 <u>操作员申请</u>\n
-		4.获取操作员列表：发送 <u>操作员列表</u>\n
-		5.设置费率：发送 <u>设置费率 X.XX</u> (例：设置费率 0.05)\n
-		6.设置汇率：发送 <u>设置汇率 币种X 汇率Y</u> (例：设置汇率 PHP 7.8)\n
 		
+		换汇统计命令：\n
+
+		1.添加管理：发送 <u>添加管理 @用户名</u>\n
+
+		2.删除管理：发送 <u>删除管理 @用户名</u>\n
+
+		⚠️添加的管理的行为必须在某一个群中进行\n
+		
+		3.设置费率：发送 <u>设置费率 X.XX</u> (例：设置费率 0.05)\n
+		
+		4.设置汇率：发送 <u>设置汇率 币种X 汇率Y</u> (例：设置汇率 PHP 7.8)\n
+
 		⚠️汇率 = 1RMB可以兑换的其他币种的值\n
+
+		⚠️如不需要显示某货币汇率，请设置为0\n
 
 		⚠️支持币种：人民币(RMB)、美元(USD)、披索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
 
-		7.记录下发：发送 <u>下发 XXX Y币种</u>(例：下发 200000 PHP) 或者 <u>-XXX Y币种</u>(例：-200000 PHP)\n
+		5.记录下发：发送 <u>下发 XXX Y币种</u>(例：下发 200000 PHP) 或者 <u>-XXX Y币种</u>(例：-200000 PHP)\n
 
-		8.记录回款：发送 <u>回款 XXX Y币种</u>(例：回款 200000 PHP) 或者 <u>+XXX Y币种</u>(例：+200000 PHP)\n
+		6.记录回款：发送 <u>回款 XXX Y币种</u>(例：回款 200000 PHP) 或者 <u>+XXX Y币种</u>(例：+200000 PHP)\n
 
-		⚠️下发与回款，若不写币种则默认为人民币(RMB)
+		⚠️下发与回款，若不写币种则默认为人民币(RMB)\n
+
+		如有疑问请联系 @guevaratech
 	`
 
 	await API.sendMessage(token, { chat_id: cid, parse_mode: 'HTML', text: r_text })
@@ -84,7 +93,7 @@ const start = async (token,message_id,from,chat,text) => {
 	return true
 }
 
-const applyAdmin = async (token,message_id,from,chat,text) => {
+const addSuper = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, is_bot } = from
 
@@ -92,14 +101,22 @@ const applyAdmin = async (token,message_id,from,chat,text) => {
 
 		return false
 	}
+
+	if (uid!==ownerId) {
+
+		return false
+	}
+
+
+
 }
 
-const getApplyAdmin = async (token,message_id,from,chat,text) => {
+const delSuper = async (token,message_id,from,chat,text) => {
 
 	console.log(from,chat,text,1)
 }
 
-const setAdmin = async (token,message_id,from,chat,text) => {
+const addAdmin = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, is_bot } = from
 
@@ -108,7 +125,7 @@ const setAdmin = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	if (id!==ownerId) {
+	if (uid!==ownerId) {
 
 	}
 
@@ -120,36 +137,6 @@ const delAdmin = async (token,message_id,from,chat,text) => {
 	console.log(from,chat,text,2)
 }
 
-const applyOperator = async (token,message_id,from,chat,text) => {
-	
-
-	const { id: uid, is_bot } = from
-
-	if (is_bot) {
-
-		return false
-	}
-
-	return
-}
-
-const getApplyOperator = async (token,message_id,from,chat,text) => {
-	
-	console.log(from,chat,text,3)	
-}
-
-const setOperator = async (token,message_id,from,chat,text) => {
-	
-	const { id: uid, is_bot } = from
-
-	const { id: cid, type } = chat
-
-}
-
-const delOperator = async (token,message_id,from,chat,text) => {
-
-	console.log(from,chat,text,4)
-}
 
 const setRate = async (token,message_id,from,chat,text) => {
 
@@ -186,39 +173,14 @@ module.exports = {
 			await start(token,message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'申请管理员')) {
+		if (await isCommand(text,'添加管理')) {
 
-			await applyAdmin(token,message_id,from,chat,text)
+			await addAdmin(token,message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'获取管理员')) {
-
-			await getApplyAdmin(token,message_id,from,chat,text)
-		}
-
-		if (await isCommand(text,'设置管理员')) {
-
-			await setAdmin(token,message_id,from,chat,text)
-		}
-
-		if (await isCommand(text,'删除管理员')) {
+		if (await isCommand(text,'删除管理')) {
 
 			await delAdmin(token,message_id,from,chat,text)
-		}
-
-		if (await isCommand(text,'申请操作员')) {
-
-			await applyOperator(token,message_id,from,chat,text)
-		}
-
-		if (await isCommand(text,'设置操作员')) {
-
-			await setOperator(token,message_id,from,chat,text)
-		}
-
-		if (await isCommand(text,'删除操作员')) {
-
-			await delOperator(token,message_id,from,chat,text)
 		}
 
 		if (await isCommand(text,'设置费率')) {

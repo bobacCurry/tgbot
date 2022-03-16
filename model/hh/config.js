@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const Config = new Schema({
 
-	gid: { type: Number, default: 0 },
+	cid: { type: Number, required: true, index: true },
 
 	charge: { type: Number, default: 0 },
 
@@ -17,6 +17,8 @@ const Config = new Schema({
 	rate_myr: { type: Number, default: 0 },
 
 	rate_thb: { type: Number, default: 0 },
+
+	admins: { type: Array, default: [] },
 
 	created_at: { type: Date },
 
