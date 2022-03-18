@@ -93,6 +93,25 @@ const start = async (token,message_id,from,chat,text) => {
 	return true
 }
 
+
+// {
+//   update_id: 958885954,
+//   message: {
+//     message_id: 54,
+//     from: {
+//       id: 1329463652,
+//       is_bot: false,
+//       first_name: 'alex',
+//       username: 'ALEX1234QWER',
+//       language_code: 'es'
+//     },
+//     chat: { id: -1001745712525, title: 'Bot', type: 'supergroup' },
+//     date: 1647422782,
+//     text: '添加超级 @GuevaraTech',
+//     entities: [ [Object] ]
+//   }
+
+
 const addSuper = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, is_bot } = from
@@ -104,16 +123,74 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 	if (uid!==ownerId) {
 
+		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，需要开发者权限' })
+
 		return false
 	}
 
+	const username = text.split(' ')[1]
 
+	if (!username) {
 
+		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，用户名不存在' })
+
+		return false
+	}
+
+	try{
+
+		await db_hh_user.create({ username })
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '新增超级管理成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+
+	return true
 }
 
 const delSuper = async (token,message_id,from,chat,text) => {
 
-	console.log(from,chat,text,1)
+	const { id: uid, is_bot } = from
+
+	if (is_bot) {
+
+		return false
+	}
+
+	if (uid!==ownerId) {
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，需要开发者权限' })
+
+		return false
+	}
+
+	const username = text.split(' ')[1]
+
+	if (!username) {
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，用户名不存在' })
+
+		return false
+	}
+
+	try{
+
+		await db_hh_user.deleteOne({ username })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+
+    return true
+
 }
 
 const addAdmin = async (token,message_id,from,chat,text) => {
@@ -171,6 +248,16 @@ module.exports = {
 		if (await isCommand(text,'/start')) {
 
 			await start(token,message_id,from,chat,text)
+		}
+
+		if (await isCommand(text,'添加超级')) {
+
+			await addSuper(token,message_id,from,chat,text)
+		}
+
+		if (await isCommand(text,'删除超级')) {
+
+			await delSuper(token,message_id,from,chat,text)
 		}
 
 		if (await isCommand(text,'添加管理')) {
