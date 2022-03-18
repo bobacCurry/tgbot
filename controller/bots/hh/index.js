@@ -116,7 +116,7 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, is_bot } = from
 
-	console.log(uid,ownerId,env)
+	console.log(uid,ownerId)
 
 	if (is_bot) {
 
