@@ -137,6 +137,13 @@ const addSuper = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
+	if (username.indexOf('@')) {
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，用户名需要以@开头' })
+
+		return false
+	}
+
 	try{
 
 		const user = await db_hh_user.findOne({ username })
