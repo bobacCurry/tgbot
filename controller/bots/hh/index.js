@@ -123,7 +123,7 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 	if (uid!==ownerId) {
 
-		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，需要开发者权限' })
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，需要开发者权限' })
 
 		return false
 	}
@@ -132,12 +132,21 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 	if (!username) {
 
-		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，用户名不存在' })
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，用户名不存在' })
 
 		return false
 	}
 
 	try{
+
+		const user = await db_hh_user.findOne({ username })
+
+		if (user) {
+
+			await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，用户名已存在' })
+
+			return false 
+		}
 
 		await db_hh_user.create({ username })
 
@@ -145,7 +154,7 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 	}catch(err){
 
-		await API.sendMessage(token, { chat_id: chat.id, text: '系统错误，请联系 @guevaratech' })
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
 
     	return false  	
     }
