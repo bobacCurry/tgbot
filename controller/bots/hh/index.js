@@ -116,10 +116,6 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, is_bot } = from
 
-	uid = String(uid)
-
-	console.log(uid,ownerId)
-
 	if (is_bot) {
 
 		return false
@@ -176,8 +172,6 @@ const addSuper = async (token,message_id,from,chat,text) => {
 const delSuper = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, is_bot } = from
-
-	uid = String(uid)
 
 	if (is_bot) {
 

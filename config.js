@@ -6,4 +6,6 @@ env = JSON.parse(env)
 
 let botUrl = "https://api.telegram.org/bot"
 
+env.ownerId = Number(env.ownerId)
+
 module.exports = { env, botUrl }
