@@ -18,8 +18,6 @@ const Config = new Schema({
 
 	rate_thb: { type: Number, default: 0 },
 
-	admins: { type: Array, default: [] },
-
 	created_at: { type: Date },
 
   	updated_at: { type: Date } 

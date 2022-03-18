@@ -2,7 +2,9 @@ const db_hh_config = require('../../../model/hh/config')
 
 const db_hh_water = require('../../../model/hh/water')
 
-const db_hh_user = require('../../../model/hh/user')
+const db_hh_super = require('../../../model/hh/super')
+
+const db_hh_admin = require('../../../model/hh/admin')
 
 const { botUrl, env: { ownerId } } = require('../../../config')
 
@@ -13,6 +15,16 @@ const API = require('../api')
 const ROLELIST = ['owner','admin','operator']
 
 const CURRENCY = { 'RMB': '人民币','USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
+
+const isGroup = (type) => {
+
+	if (type==='group'||type==='supergroup') {
+
+		return true
+	}
+
+	return false
+}
 
 const isCommand  = async (text,command) => {
 
@@ -146,7 +158,7 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 	try{
 
-		const user = await db_hh_user.findOne({ username })
+		const user = await db_hh_super.findOne({ username })
 
 		if (user) {
 
@@ -155,9 +167,9 @@ const addSuper = async (token,message_id,from,chat,text) => {
 			return false 
 		}
 
-		await db_hh_user.create({ username })
+		await db_hh_super.create({ username })
 
-		await API.sendMessage(token, { chat_id: chat.id, text: '新增超级管理成功' })
+		await API.sendMessage(token, { chat_id: chat.id, text: '✅新增超级管理成功' })
 
 	}catch(err){
 
@@ -180,7 +192,7 @@ const delSuper = async (token,message_id,from,chat,text) => {
 
 	if (uid!==ownerId) {
 
-		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，需要开发者权限' })
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，需要开发者权限' })
 
 		return false
 	}
@@ -189,18 +201,20 @@ const delSuper = async (token,message_id,from,chat,text) => {
 
 	if (!username) {
 
-		await API.sendMessage(token, { chat_id: chat.id, text: '操作失败，用户名不存在' })
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，用户名不存在' })
 
 		return false
 	}
 
 	try{
 
-		await db_hh_user.deleteOne({ username })
+		await db_hh_super.deleteOne({ username })
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '✅删除超级管理成功' })
 
 	}catch(err){
 
-		await API.sendMessage(token, { chat_id: chat.id, text: '系统错误，请联系 @guevaratech' })
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
 
     	return false  	
     }
@@ -211,23 +225,97 @@ const delSuper = async (token,message_id,from,chat,text) => {
 
 const addAdmin = async (token,message_id,from,chat,text) => {
 
-	const { id: uid, is_bot } = from
+	const { id: uid, username, is_bot } = from
+
+	const { id: cid, type } = chat
 
 	if (is_bot) {
 
 		return false
 	}
 
-	if (uid!==ownerId) {
+	if (!isGroup(type)) {
 
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
 	}
+
+	const sup = await db_hh_super.findOne({ username })
+
+	if (!sup) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要超级管理权限，请联系 @guevaratech' })
+
+		return false
+	}
+
+	const name = text.split(' ')[1]
+
+	if (!name) {
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，请选择用户' })
+
+		return false
+	}
+
+	const admin = await db_hh_admin.findOne({ cid, name })
+
+	if (admin) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该管理已存在，请勿重复添加' })
+
+		return false
+	}
+
+	await db_hh_admin.create({ cid, name, super: sup._id })
+
+	await API.sendMessage(token, { chat_id: cid, text: '✅新增管理成功' })
 
 	return true
 }
 
 const delAdmin = async (token,message_id,from,chat,text) => {
 
-	console.log(from,chat,text,2)
+	const { id: uid, username, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (is_bot) {
+
+		return false
+	}
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	const sup = await db_hh_super.findOne({ username })
+
+	if (!sup) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要超级管理权限，请联系 @guevaratech' })
+
+		return false
+	}
+
+	const name = text.split(' ')[1]
+
+	if (!name) {
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，请选择用户' })
+
+		return false
+	}
+
+	await db_hh_admin.deleteOne({ cid, name })
+
+	await API.sendMessage(token, { chat_id: cid, text: '✅删除管理成功' })
+
+	return true
 }
 
 

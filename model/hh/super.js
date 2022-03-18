@@ -2,7 +2,7 @@ const mongoose = require('../db.js')
 
 const Schema = mongoose.Schema
 
-const User = new Schema({
+const Super = new Schema({
 
 	//username
 	username: { type: String, required: true, index: true },
@@ -19,4 +19,4 @@ const User = new Schema({
 
 })
 
-module.exports = mongoose.model('hh_user', User,'hh_user')
+module.exports = mongoose.model('hh_super', Super,'hh_super')
