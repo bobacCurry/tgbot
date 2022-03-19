@@ -192,7 +192,7 @@ const delSuper = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	const username = text.split(' ')[1]
+	let username = text.split(' ')[1]
 
 	if (!username) {
 
@@ -310,7 +310,7 @@ const delAdmin = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	const name = text.split(' ')[1]
+	let name = text.split(' ')[1]
 
 	if (!name) {
 
