@@ -43,6 +43,46 @@ const isCommand  = async (text,command) => {
 	return false
 }
 
+
+
+const isSuper = async (username) => {
+
+	try{
+
+		const sup = await db_hh_super.findOne({ username: username.toLowerCase() })
+
+		if (!sup) {
+
+			return false
+		}
+
+	}catch(err){
+
+    	return false
+    }
+
+    return true
+}
+
+const isAdmin = async (cid,username,first_name) => {
+
+	try{
+
+		const admin = await db_hh_admin.findOne({ $and: [ { cid }, { $or: [ { name: username.toLowerCase() }, { name: first_name.toLowerCase() } ] } ] })
+
+		if (!admin) {
+
+			return false
+		}
+
+	}catch(err){
+
+    	return false
+    }
+
+    return true	
+}
+
 const isOut = async (text) => {
 
 	if (isNaN(text)||Number(text)>0) {
@@ -380,7 +420,7 @@ const getAdmin = async (token,message_id,from,chat,text) => {
 
 		for (var i = admins.length - 1; i >= 0; i--) {
 
-			adminText = adminText + '@' + admins[i].name + '\n'
+			adminText = adminText + '@' + admins[i].name + '\n\n'
 		}
 
 		await API.sendMessage(token, { chat_id: cid, text: adminText?adminText:'暂未设置管理员' })
@@ -397,9 +437,18 @@ const getAdmin = async (token,message_id,from,chat,text) => {
 
 const setCharge = async (token,message_id,from,chat,text) => {
 
-	const { id: uid, username, is_bot } = from
+	const { id: uid, username, first_name, is_bot } = from
 
 	const { id: cid, type } = chat
+
+	const isAdmin = await isAdmin(cid,username,first_name)
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
 
 	let charge = text.split(' ')[1]
 
@@ -437,9 +486,16 @@ const setCharge = async (token,message_id,from,chat,text) => {
 
 const setRate = async (token,message_id,from,chat,text) => {
 
-	const { id: uid, username, is_bot } = from
+	const { id: uid, username, first_name, is_bot } = from
 
 	const { id: cid, type } = chat
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
 
 	let currency = text.split(' ')[1]
 
