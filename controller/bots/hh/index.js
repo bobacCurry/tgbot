@@ -345,6 +345,56 @@ const delAdmin = async (token,message_id,from,chat,text) => {
 	return true
 }
 
+const getAdmin = async (token,message_id,from,chat,text) => {
+
+	const { id: uid, username, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (is_bot) {
+
+		return false
+	}
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	const sup = await db_hh_super.findOne({ username: username.toLowerCase() })
+
+	if (!sup) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要超级管理权限，请联系 @guevaratech' })
+
+		return false
+	}
+
+	try{
+
+		const admins = await db_hh_admin.find({ cid },{ name: 1 })
+
+		let adminText = ''
+
+		for (var i = admins.length - 1; i >= 0; i--) {
+
+			adminText = adminText + '@' + admins[i].name + '\n'
+		}
+
+		await API.sendMessage(token, { chat_id: cid, text: adminText?adminText:'暂未设置管理员' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false
+    }
+
+	return true
+}
+
 const setCharge = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, username, is_bot } = from
@@ -483,6 +533,11 @@ module.exports = {
 		if (await isCommand(text,'删除管理')) {
 
 			await delAdmin(token,message_id,from,chat,text)
+		}
+
+		if (await isCommand(text,'查询管理')) {
+
+			await getAdmin(token,message_id,from,chat,text)
 		}
 
 		if (await isCommand(text,'设置费率')) {
