@@ -450,6 +450,8 @@ const setCharge = async (token,message_id,from,chat,text) => {
 
 	let charge = text.split(' ')[1]
 
+	console.log(text,charge)
+
 	if (isNaN(charge)) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，费率必须为数字' })
