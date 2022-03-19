@@ -14,7 +14,7 @@ const API = require('../api')
 
 const ROLELIST = ['owner','admin','operator']
 
-const CURRENCY = { 'RMB': '人民币','USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
+const CURRENCYLIST = { 'USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
 
 const isGroup = (type) => {
 
@@ -75,15 +75,15 @@ const start = async (token,message_id,from,chat,text) => {
 		
 		换汇统计命令：\n
 
-		1.添加管理：发送 <u>添加管理 <b>@用户名</b></u>\n
+		1.添加管理：发送 <u><b>添加管理 @用户名</b></u>\n
 
-		2.删除管理：发送 <u>删除管理 <b>@用户名</b></u>\n
+		2.删除管理：发送 <u><b>删除管理 @用户名</b></u>\n
 
 		⚠️添加的管理的行为必须在某一个群中进行\n
 		
-		3.设置费率：发送 <u>设置费率 <b>X.XX</b></u> (例：设置费率 0.05)\n
+		3.设置费率：发送 <u><b>设置费率 X.XX</b></u> (例：设置费率 0.05)\n
 		
-		4.设置汇率：发送 <u>设置汇率 <b>货币代码</b> <b>汇率</b></u> (例：设置汇率 PHP 7.8)\n
+		4.设置汇率：发送 <u><b>设置汇率 货币代码 汇率</b></u> (例：设置汇率 PHP 7.8)\n
 
 		⚠️汇率 = 1RMB可以兑换的其他货币的值\n
 
@@ -91,9 +91,9 @@ const start = async (token,message_id,from,chat,text) => {
 
 		⚠️支持货币：人民币(RMB)、美元(USD)、披索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
 
-		5.记录下发：发送 <u>下发 <b>数量</b> <b>货币代码</b></u>(例：下发 200000 PHP) 或者 <u>-<b>数量</b> <b>货币代码</b></u>(例：-200000 PHP)\n
+		5.记录下发：发送 <u><b>下发 数量 货币代码</b></u>(例：下发 200000 PHP) 或者 <u><b>-数量 货币代码</b></u>(例：-200000 PHP)\n
 
-		6.记录回款：发送 <u>回款 <b>数量</b> <b>货币代码</b></u>(例：回款 200000 PHP) 或者 <u>+<b>数量</b> <b>货币代码</b></u>(例：+200000 PHP)\n
+		6.记录回款：发送 <u><b>回款 数量 货币代码</b></u>(例：回款 200000 PHP) 或者 <u><b>+数量 货币代码</b></u>(例：+200000 PHP)\n
 
 		⚠️下发与回款，若不填写货币代码则默认为人民币(RMB)\n
 
@@ -329,22 +329,115 @@ const delAdmin = async (token,message_id,from,chat,text) => {
 
 	name = name.toLowerCase()
 
-	await db_hh_admin.deleteOne({ cid, name })
+	try{
 
-	await API.sendMessage(token, { chat_id: cid, text: '✅删除管理成功' })
+		await db_hh_admin.deleteOne({ cid, name })
+
+		await API.sendMessage(token, { chat_id: cid, text: '✅删除管理成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
 
 	return true
 }
 
+const setCharge = async (token,message_id,from,chat,text) => {
+
+	const { id: uid, username, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	let charge = text.split(' ')[1]
+
+	if (isNaN(charge)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，费率必须为数字' })
+
+		return false
+	}
+
+	try{
+
+		const chat = await db_hh_config.findOne({ cid })
+
+		if (chat) {
+
+			await db_hh_config.updateOne({ cid }, { charge })
+
+		}else{
+
+			await db_hh_config.create({ cid, charge })
+		}
+
+		await API.sendMessage(token, { chat_id: cid, text: '✅费率配置成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+
+	return true
+}
 
 const setRate = async (token,message_id,from,chat,text) => {
 
-	console.log(from,chat,text,5)	
-}
+	const { id: uid, username, is_bot } = from
 
-const setCharge = async (token,message_id,from,chat,text) => {
+	const { id: cid, type } = chat
 
-	console.log(from,chat,text,6)
+	let currency = text.split(' ')[1]
+
+	let rate = text.split(' ')[2]
+
+	if (!currency||!CURRENCYLIST[currency]) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
+
+		return false
+	}
+
+	if (isNaN(rate)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，汇率必须为数字' })
+
+		return false
+	}
+
+	try{
+
+		let update = {}
+
+		currency = currency.toLowerCase()
+
+		update[`rate_${currency}`] = rate
+
+		const chat = await db_hh_config.findOne({ cid })
+
+		if (chat) {
+
+			await db_hh_config.updateOne({ cid }, update)
+
+		}else{
+
+			await db_hh_config.create({ cid, ...update })
+		}
+
+		await API.sendMessage(token, { chat_id: cid, text: '✅汇率配置成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+
+	return true
 }
 
 const setOut = async (token,message_id,from,chat,text) => {
