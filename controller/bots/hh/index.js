@@ -201,6 +201,8 @@ const delSuper = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
+	username = username.replace('@','')
+
 	try{
 
 		await db_hh_super.deleteOne({ username })
@@ -316,6 +318,8 @@ const delAdmin = async (token,message_id,from,chat,text) => {
 
 		return false
 	}
+
+	name = name.replace('@','')
 
 	await db_hh_admin.deleteOne({ cid, name })
 
