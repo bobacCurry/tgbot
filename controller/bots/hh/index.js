@@ -598,12 +598,12 @@ module.exports = {
 
 		if (await isCommand(text,'设置费率')) {
 
-			await setRate(token,message_id,from,chat,text)
+			await setCharge(token,message_id,from,chat,text)
 		}
 
 		if (await isCommand(text,'设置汇率')) {
 
-			await setCharge(token,message_id,from,chat,text)
+			await setRate(token,message_id,from,chat,text)
 		}
 
 		if (await isCommand(text,'下发')) {
