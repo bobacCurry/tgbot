@@ -441,8 +441,6 @@ const setCharge = async (token,message_id,from,chat,text) => {
 
 	const { id: cid, type } = chat
 
-	const isAdmin = await isAdmin(cid,username,first_name)
-
 	if (!await isAdmin(cid,username,first_name)) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
