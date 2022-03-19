@@ -242,7 +242,7 @@ const addAdmin = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	const sup = await db_hh_super.findOne({ username })
+	const sup = await db_hh_super.findOne({ username: username.toLowerCase() })
 
 	if (!sup) {
 
@@ -307,7 +307,7 @@ const delAdmin = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	const sup = await db_hh_super.findOne({ username })
+	const sup = await db_hh_super.findOne({ username: username.toLowerCase() })
 
 	if (!sup) {
 
