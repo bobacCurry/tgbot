@@ -149,12 +149,7 @@ const addSuper = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	if (username.indexOf('@')) {
-
-		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️操作失败，用户名需要以@开头' })
-
-		return false
-	}
+	username = username.replace('@','')
 
 	try{
 
@@ -259,18 +254,29 @@ const addAdmin = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	const admin = await db_hh_admin.findOne({ cid, name })
+	name = name.replace('@','')
 
-	if (admin) {
+	try{
 
-		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该管理已存在，请勿重复添加' })
+		const admin = await db_hh_admin.findOne({ cid, name })
 
-		return false
-	}
+		if (admin) {
 
-	await db_hh_admin.create({ cid, name, super: sup._id })
+			await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该管理已存在，请勿重复添加' })
 
-	await API.sendMessage(token, { chat_id: cid, text: '✅新增管理成功' })
+			return false
+		}
+
+		await db_hh_admin.create({ cid, name, super: sup._id })
+
+		await API.sendMessage(token, { chat_id: cid, text: '✅新增管理成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
 
 	return true
 }
