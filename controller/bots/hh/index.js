@@ -85,10 +85,11 @@ const isAdmin = async (cid,username,first_name) => {
 
 const isOut = async (text) => {
 
-	if (isNaN(text)||Number(text)>0) {
+	const money = text.split(' ')[0]
+
+	if (isNaN(money)||Number(money)>0) {
 
 		return false
-
 	}
 
 	return true
@@ -96,10 +97,11 @@ const isOut = async (text) => {
 
 const isIn = async (text) => {
 
-	if (isNaN(text)||Number(text)<0) {
+	const money = text.split(' ')[0]
+
+	if (isNaN(money)||Number(money)<0) {
 
 		return false
-
 	}
 
 	return true
@@ -450,8 +452,6 @@ const setCharge = async (token,message_id,from,chat,text) => {
 
 	let charge = text.split(' ')[1]
 
-	console.log(text,charge)
-
 	if (isNaN(charge)) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，费率必须为数字' })
@@ -548,12 +548,46 @@ const setRate = async (token,message_id,from,chat,text) => {
 
 const setOut = async (token,message_id,from,chat,text) => {
 
-	console.log(from,chat,text,7)
+	const { id: uid, username, first_name, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	const money = text.split(' ')[0]
+
+	const currency = text.split(' ')[1]
+
+	console.log(money,currency)
+
+	return true
 }
 
 const setIn = async (token,message_id,from,chat,text) => {
 
-	console.log(from,chat,text,8)
+	const { id: uid, username, first_name, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	const money = text.split(' ')[0]
+
+	const currency = text.split(' ')[1]
+
+	console.log(money,currency)
+
+	return true
 }
 
 module.exports = {
@@ -566,62 +600,66 @@ module.exports = {
 
 		console.log(req.body)
 
+		if (!text) {
+
+			return res.send('true')
+		}
+
 		if (await isCommand(text,'/start')) {
 
 			await start(token,message_id,from,chat,text)
-		}
+		} 
 
-		if (await isCommand(text,'添加超级')) {
+		else if (await isCommand(text,'添加超级')) {
 
 			await addSuper(token,message_id,from,chat,text)
-		}
+		} 
 
-		if (await isCommand(text,'删除超级')) {
+		else if (await isCommand(text,'删除超级')) {
 
 			await delSuper(token,message_id,from,chat,text)
-		}
+		} 
 
-		if (await isCommand(text,'添加管理')) {
+		else if (await isCommand(text,'添加管理')) {
 
-			await addAdmin(token,message_id,from,chat,text)
-		}
+			await addAdmin(token,message_id,from,chat,text)		
+		} 
 
-		if (await isCommand(text,'删除管理')) {
+		else if (await isCommand(text,'删除管理')) {
 
 			await delAdmin(token,message_id,from,chat,text)
-		}
-
-		if (await isCommand(text,'查询管理')) {
+		
+		} else if (await isCommand(text,'查询管理')) {
 
 			await getAdmin(token,message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'设置费率')) {
+		else if (await isCommand(text,'设置费率')) {
 
 			await setCharge(token,message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'设置汇率')) {
+		else if (await isCommand(text,'设置汇率')) {
 
 			await setRate(token,message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'下发')) {
+		else if (await isCommand(text,'下发')) {
 
 			await setOut(token,message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'回款')) {
+		else if (await isCommand(text,'回款')) {
 
 			await setIn(token,message_id,from,chat,text)
 		}
 
-		if (await isOut(text)) {
+		else if (await isOut(text)) {
 
 			await setOut(token,message_id,from,chat,text)
 		}
 
-		if (await isIn(text)) {
+		else if (await isIn(text)) {
 
 			await setIn(token,message_id,from,chat,text)
 		}
