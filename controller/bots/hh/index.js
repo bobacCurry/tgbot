@@ -551,11 +551,11 @@ const setRate = async (token,message_id,from,chat,text) => {
 	return true
 }
 
-const setOut = async (token,message_id,from,chat,money,currency) => {
+const setWater = async (token,message_id,from,chat,money,currency,io) => {
 
 	const { id: uid, username, first_name, is_bot } = from
 
-	const { id: cid, type } = chat
+	const { id: cid } = chat
 
 	if (!await isAdmin(cid,username,first_name)) {
 
@@ -588,7 +588,7 @@ const setOut = async (token,message_id,from,chat,money,currency) => {
 
 		const name = username?`@${username}`:`@${first_name}`
 
-		await db_hh_water.create({ cid, uid, name, charge, rate, currency, out: money })
+		await db_hh_water.create({ cid, uid, name, charge, rate, currency, money, io })
 
 		await API.sendMessage(token, { chat_id: cid, text: '✅数据录入成功' })
 
@@ -596,58 +596,7 @@ const setOut = async (token,message_id,from,chat,money,currency) => {
 
 		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
 
-    	return false  	
-    }
-
-	return true
-}
-
-const setIn = async (token,message_id,from,chat,money,currency) => {
-
-	const { id: uid, username, first_name, is_bot } = from
-
-	const { id: cid, type } = chat
-
-	if (!await isAdmin(cid,username,first_name)) {
-
-		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
-
-		return false
-	}
-
-	if (!CURRENCYLIST[currency]) {
-
-		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
-
-		return false
-	}
-
-	if (isNaN(money)) {
-
-		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请输入记录数量' })
-
-		return false
-	}
-
-	try{
-
-		const config  = await db_hh_config.findOne({ cid })
-
-		const rate = config[`rate_${currency}`]
-
-		const charge = config['charge']
-
-		const name = username?`@${username}`:`@${first_name}`
-
-		await db_hh_water.create({ cid, uid, name, charge, rate, currency, in: money })
-
-		await API.sendMessage(token, { chat_id: cid, text: '✅数据录入成功' })
-
-	}catch(err){
-
-		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
-
-    	return false  	
+    	return false
     }
 
 	return true
@@ -713,7 +662,7 @@ module.exports = {
 
 			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
 
-			await setOut(token,message_id,from,chat,money,currency)
+			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
 
 		else if (await isCommand(text,'回款')) {
@@ -722,7 +671,7 @@ module.exports = {
 
 			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
 
-			await setIn(token,message_id,from,chat,money,currency)
+			await setWater(token,message_id,from,chat,money,currency,'i')
 		}
 
 		else if (await isOut(text)) {
@@ -731,7 +680,7 @@ module.exports = {
 
 			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
 
-			await setOut(token,message_id,from,chat,money,currency)
+			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
 
 		else if (await isIn(text)) {
@@ -740,7 +689,7 @@ module.exports = {
 
 			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
 
-			await setIn(token,message_id,from,chat,money,currency)
+			await setWater(token,message_id,from,chat,money,currency,'i')
 		}
 
 		return res.send('true')

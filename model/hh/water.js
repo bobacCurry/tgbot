@@ -16,9 +16,9 @@ const Water = new Schema({
 
 	currency: { type: String, default: '' },
 
-	in: { type: Number, default: 0 },
-
-	out: { type: Number, default: 0 },
+	money: { type: Number, default: 0 },
+	//in or out
+	io: { type: String, required: true, index: true },
 
 	created_at: { type: Date },
 
