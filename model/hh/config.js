@@ -8,15 +8,17 @@ const Config = new Schema({
 
 	charge: { type: Number, default: 0 },
 
-	rate_usdt: { type: Number, default: 0 },
+	rate_RMB: { type: Number, default: 1 },
 
-	rate_usd: { type: Number, default: 0 },
+	rate_USDT: { type: Number, default: 0 },
 
-	rate_php: { type: Number, default: 0 },
+	rate_USD: { type: Number, default: 0 },
 
-	rate_myr: { type: Number, default: 0 },
+	rate_PHP: { type: Number, default: 0 },
 
-	rate_thb: { type: Number, default: 0 },
+	rate_MYR: { type: Number, default: 0 },
+
+	rate_THB: { type: Number, default: 0 },
 
 	created_at: { type: Date },
 

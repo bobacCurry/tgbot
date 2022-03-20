@@ -14,7 +14,7 @@ const API = require('../api')
 
 const ROLELIST = ['owner','admin','operator']
 
-const CURRENCYLIST = { 'USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
+const CURRENCYLIST = { 'CNY': '人民币','USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
 
 const isGroup = (type) => {
 
@@ -508,6 +508,13 @@ const setRate = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
+	if (currency==='CNY') {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，人民币为默认货币' })
+
+		return false
+	}
+
 	if (isNaN(rate)) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，汇率必须为数字' })
@@ -518,8 +525,6 @@ const setRate = async (token,message_id,from,chat,text) => {
 	try{
 
 		let update = {}
-
-		currency = currency.toLowerCase()
 
 		update[`rate_${currency}`] = rate
 
@@ -546,7 +551,7 @@ const setRate = async (token,message_id,from,chat,text) => {
 	return true
 }
 
-const setOut = async (token,message_id,from,chat,text) => {
+const setOut = async (token,message_id,from,chat,money,currency) => {
 
 	const { id: uid, username, first_name, is_bot } = from
 
@@ -559,16 +564,45 @@ const setOut = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	const money = text.split(' ')[0]
+	if (!CURRENCYLIST[currency]) {
 
-	const currency = text.split(' ')[1]
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
 
-	console.log(money,currency)
+		return false
+	}
+
+	if (isNaN(money)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请输入记录数量' })
+
+		return false
+	}
+
+	try{
+
+		const config  = await db_hh_config.findOne({ cid })
+
+		const rate = config[`rate_${currency}`]
+
+		const charge = config['charge']
+
+		const name = username?`@${username}`:`@${first_name}`
+
+		await db_hh_water.create({ cid, uid, name, charge, rate, currency, out: money })
+
+		await API.sendMessage(token, { chat_id: cid, text: '✅数据录入成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
 
 	return true
 }
 
-const setIn = async (token,message_id,from,chat,text) => {
+const setIn = async (token,message_id,from,chat,money,currency) => {
 
 	const { id: uid, username, first_name, is_bot } = from
 
@@ -581,11 +615,40 @@ const setIn = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	const money = text.split(' ')[0]
+	if (!CURRENCYLIST[currency]) {
 
-	const currency = text.split(' ')[1]
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
 
-	console.log(money,currency)
+		return false
+	}
+
+	if (isNaN(money)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请输入记录数量' })
+
+		return false
+	}
+
+	try{
+
+		const config  = await db_hh_config.findOne({ cid })
+
+		const rate = config[`rate_${currency}`]
+
+		const charge = config['charge']
+
+		const name = username?`@${username}`:`@${first_name}`
+
+		await db_hh_water.create({ cid, uid, name, charge, rate, currency, in: money })
+
+		await API.sendMessage(token, { chat_id: cid, text: '✅数据录入成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
 
 	return true
 }
@@ -646,22 +709,38 @@ module.exports = {
 
 		else if (await isCommand(text,'下发')) {
 
-			await setOut(token,message_id,from,chat,text)
+			const money = text.split(' ')[1]
+
+			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+
+			await setOut(token,message_id,from,chat,money,currency)
 		}
 
 		else if (await isCommand(text,'回款')) {
 
-			await setIn(token,message_id,from,chat,text)
+			const money = text.split(' ')[1]
+
+			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+
+			await setIn(token,message_id,from,chat,money,currency)
 		}
 
 		else if (await isOut(text)) {
 
-			await setOut(token,message_id,from,chat,text)
+			const money = text.split(' ')[0]
+
+			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
+
+			await setOut(token,message_id,from,chat,money,currency)
 		}
 
 		else if (await isIn(text)) {
 
-			await setIn(token,message_id,from,chat,text)
+			const money = text.split(' ')[0]
+
+			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
+
+			await setIn(token,message_id,from,chat,money,currency)
 		}
 
 		return res.send('true')
