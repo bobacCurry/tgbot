@@ -8,6 +8,8 @@ const db_hh_admin = require('../../../model/hh/admin')
 
 const { botUrl, env: { ownerId } } = require('../../../config')
 
+const moment = require('moment')
+
 const axios = require('axios')
 
 const API = require('../api')
@@ -105,6 +107,16 @@ const isIn = async (text) => {
 	}
 
 	return true
+}
+
+const isDate = (date) => {
+	
+	if(isNaN(date)&&!isNaN(Date.parse(date))){
+
+	　　return true
+	}
+
+	return false
 }
 
 const start = async (token,message_id,from,chat,text) => {
@@ -443,6 +455,13 @@ const setCharge = async (token,message_id,from,chat,text) => {
 
 	const { id: cid, type } = chat
 
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
 	if (!await isAdmin(cid,username,first_name)) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
@@ -489,6 +508,13 @@ const setRate = async (token,message_id,from,chat,text) => {
 	const { id: uid, username, first_name, is_bot } = from
 
 	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
 
 	if (!await isAdmin(cid,username,first_name)) {
 
@@ -555,7 +581,14 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 
 	const { id: uid, username, first_name, is_bot } = from
 
-	const { id: cid } = chat
+	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
 
 	if (!await isAdmin(cid,username,first_name)) {
 
@@ -573,7 +606,7 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 
 	if (isNaN(money)) {
 
-		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请输入记录数量' })
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请输入正确的数量' })
 
 		return false
 	}
@@ -616,6 +649,55 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
     }
 
 	return true
+}
+
+const getWater = async (token,message_id,from,chat,text) => {
+
+	const { id: uid, username, first_name, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	let start = text.split(' ')[1]?text.split(' ')[1]:moment().format('YYYY-MM-DD')
+
+	if (!isDate(start)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请输入正确的日期格式：年-月-日' })
+
+		return false
+	}
+
+	let end = moment(start).add(1, 'days')
+
+	console.log(start,end)
+
+	return true
+
+	try{
+
+		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false
+    }
+
+    return true
 }
 
 module.exports = {
@@ -670,6 +752,11 @@ module.exports = {
 		else if (await isCommand(text,'设置汇率')) {
 
 			await setRate(token,message_id,from,chat,text)
+		}
+
+		else if (await isCommand(text,'获取流水')){
+
+			await getWater(token,message_id,from,chat,text)
 		}
 
 		else if (await isCommand(text,'下发')) {
