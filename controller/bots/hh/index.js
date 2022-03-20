@@ -686,6 +686,8 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } })
 
+		console.log(water)
+
 	}catch(err){
 
 		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
