@@ -680,7 +680,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	let end = moment(start).add(1, 'days')
+	let end = moment(start).add(1, 'days').format('YYYY-MM-DD')
 
 	console.log(start,end)
 
