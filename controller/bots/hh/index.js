@@ -690,24 +690,38 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } })
 
-		let water_in = '回款明细：\n'
+		let water_in = '回款明细：\n\n'
 
-		let water_out = '下发明细：\n'
+		let water_out = '下发明细：\n\n'
 
-		for (var i = water.length - 1; i >= 0; i--) {
+		let water_total = '总计：\n\n'
+
+		let total = { CNY: 0, USDT: 0, USD: 0, PHP: 0, MYR: 0, THB: 0 }
+
+		for (let i = water.length - 1; i >= 0; i--) {
 
 			if (water[i].io==='i') {
 
-				water_in = water_in + moment(water[i].created_at).format('HH:mm:ss') + ' ' + water[i].name + ' ' + water[i].money+ ' ' + water[i].currency + '\n'
+				water_in = water_in + water[i].name + ' ' + water[i].money + ' ' + water[i].currency + '\n\n'
 			}
 
 			if (water[i].io==='o') {
 
-				water_out = water_out + moment(water[i].created_at).format('HH:mm:ss') + ' ' + water[i].name + ' ' + water[i].money+ ' ' + water[i].currency + '\n'
+				water_out = water_out + water[i].name + ' ' + water[i].money + ' ' + water[i].currency + '\n\n'
+			}
+
+			total[water[i].currency] += water[i].money
+		}
+
+		for (let i in total) {
+			
+			if (total[i]) {
+
+				water_total += i + ' ' + total[i] + '|' + ' '
 			}
 		}
 
-		const water_list = water_in + water_out
+		const water_list = water_in + water_out + water_total
 
 		await API.sendMessage(token, { chat_id: cid, text: water_list })
 
