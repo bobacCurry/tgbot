@@ -696,7 +696,7 @@ module.exports = {
 
 			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
 
-			console.log(text.split(' '))
+			console.log(text.split(' '),money,currency)
 
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
