@@ -8,7 +8,7 @@ const Config = new Schema({
 
 	charge: { type: Number, default: 0 },
 
-	rate_RMB: { type: Number, default: 1 },
+	rate_CNY: { type: Number, default: 1 },
 
 	rate_USDT: { type: Number, default: 0 },
 
