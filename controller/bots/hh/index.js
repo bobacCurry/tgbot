@@ -674,7 +674,7 @@ module.exports = {
 
 		else if (await isCommand(text,'下发')) {
 
-			const money = text.split(' ')[1]
+			const money = 0 - text.split(' ')[1]
 
 			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
 
@@ -692,7 +692,7 @@ module.exports = {
 
 		else if (await isOut(text)) {
 
-			const money = 0 - text.split(' ')[0]
+			const money = text.split(' ')[0]
 
 			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
 
