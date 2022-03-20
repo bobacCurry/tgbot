@@ -717,7 +717,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 			
 			if (total[i]) {
 
-				water_total += i + ' ' + total[i] + '|' + ' '
+				water_total += i + ' ' + total[i] + ' ' + '|' + ' '
 			}
 		}
 
