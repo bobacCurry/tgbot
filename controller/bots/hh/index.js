@@ -582,6 +582,13 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 
 		const config  = await db_hh_config.findOne({ cid })
 
+		if (!config) {
+
+			await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，未设置该币种汇率，请先设置汇率' })
+
+			return false	
+		}
+
 		const rate = config[`rate_${currency}`]
 
 		if (!rate) {
