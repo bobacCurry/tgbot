@@ -151,6 +151,10 @@ const start = async (token,message_id,from,chat,text) => {
 
 		⚠️下发与回款，若不填写货币代码则默认为人民币(RMB)\n
 
+		7.获取流水: 发送 <u><b>获取流水 日期（年-月-日）</b></u>(例：获取流水 2022-2-22)\n
+
+		⚠️获取流水后可以填写某日日期获取该日流水，如不填写日期，则默认获取今日流水\n
+
 		如有疑问请联系 @guevaratech
 	`
 
@@ -686,7 +690,26 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } })
 
-		console.log(water)
+		let water_in = '回款明细：\n'
+
+		let water_out = '下发明细：\n'
+
+		for (var i = water.length - 1; i >= 0; i--) {
+
+			if (water[i].io==='i') {
+
+				water_in = water_in + moment(water[i].created_at).format('HH:mm:ss') + ' ' + water[i].name + ' ' + water[i].money+ ' ' + water[i].currency + '\n'
+			}
+
+			if (water[i].io==='o') {
+
+				water_out = water_out + moment(water[i].created_at).format('HH:mm:ss') + ' ' + water[i].name + ' ' + water[i].money+ ' ' + water[i].currency + '\n'
+			}
+		}
+
+		const water_list = water_in + water_out
+
+		await API.sendMessage(token, { chat_id: cid, text: water_list })
 
 	}catch(err){
 
