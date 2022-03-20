@@ -692,7 +692,7 @@ module.exports = {
 
 		else if (await isOut(text)) {
 
-			const money = text.split(' ')[0]
+			const money = 0 - text.split(' ')[0]
 
 			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
 
