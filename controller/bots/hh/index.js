@@ -682,10 +682,6 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 	let end = moment(start).add(1, 'days').format('YYYY-MM-DD')
 
-	console.log(start,end)
-
-	return true
-
 	try{
 
 		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } })
