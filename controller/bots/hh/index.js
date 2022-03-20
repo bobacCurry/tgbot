@@ -601,6 +601,8 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 
 	}catch(err){
 
+		console.log(err)
+
 		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
 
     	return false
