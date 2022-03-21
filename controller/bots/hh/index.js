@@ -710,7 +710,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				let money_i = 0
 
-				water_in.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${water[i].currency}`)
+				water_in.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${CURRENCYLIST[water[i].currency]}`)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -727,7 +727,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				let money_o = 0
 
-				water_out.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${water[i].currency}`).toFixed(0)
+				water_out.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${CURRENCYLIST[water[i].currency]}`).toFixed(0)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -763,11 +763,11 @@ const getWater = async (token,message_id,from,chat,text) => {
 					rate_array.push(`${CURRENCYLIST[currency]}(${currency})汇率：${rate}`)
 				}
 
-				out_total_array.push(`${(out_total*rate).toFixed(0)}${currency}`)
+				out_total_array.push(`${(out_total*rate).toFixed(0)}${CURRENCYLIST[currency]}`)
 
-				out_should_array.push(`${(out_should*rate).toFixed(0)}${currency}`)
+				out_should_array.push(`${(out_should*rate).toFixed(0)}${CURRENCYLIST[currency]}`)
 
-				out_need_array.push(`${(out_need*rate).toFixed(0)}${currency}`)
+				out_need_array.push(`${(out_need*rate).toFixed(0)}${CURRENCYLIST[currency]}`)
 			}
 		}
 
