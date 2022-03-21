@@ -686,7 +686,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 	try{
 
-		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1 })
+		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1, created_at:1 })
 
 		const config  = await db_hh_config.findOne({ cid })
 
