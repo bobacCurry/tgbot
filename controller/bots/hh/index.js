@@ -734,7 +734,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 					money_o = (water[i].money/config[`rate_${water[i].currency}`]).toFixed(0)
 				}
 
-				out_total += money_o
+				out_total += Number(money_o)
 			}
 		}
 
@@ -792,8 +792,6 @@ module.exports = {
 		const token = req.params.token
 
 		const { update_id, message: { message_id, from, chat, text, entities } } = req.body
-
-		console.log(req.body)
 
 		if (!text) {
 
