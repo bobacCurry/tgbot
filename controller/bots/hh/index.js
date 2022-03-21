@@ -688,42 +688,87 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 	try{
 
-		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } })
+		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1 })
 
-		let water_in = '回款明细：\n\n'
+		const config  = await db_hh_config.findOne({ cid })
 
-		let water_out = '下发明细：\n\n'
+		let water_in = []
 
-		let water_total = '总计：\n\n'
+		let water_out = []
 
-		let total = { CNY: 0, USDT: 0, USD: 0, PHP: 0, MYR: 0, THB: 0 }
+		let count_in = 0
+
+		let count_out = 0
+
+		let in_total = 0
+
+		let out_total = 0
 
 		for (let i = water.length - 1; i >= 0; i--) {
 
 			if (water[i].io==='i') {
 
-				water_in = water_in + water[i].name + ' ' + water[i].money + ' ' + water[i].currency + '\n\n'
+				count_in++
+
+				water_in.push(`${water[i].name} ${water[i].money} ${water[i].currency}`)
+
+				if (config[`rate_${water[i].currency}`]) {
+
+					const money_i = (water[i].money/config[`rate_${water[i].currency}`])
+				}
+
+				in_total += money_i
+
 			}
 
 			if (water[i].io==='o') {
 
-				water_out = water_out + water[i].name + ' ' + water[i].money + ' ' + water[i].currency + '\n\n'
-			}
+				count_out++
 
-			total[water[i].currency] += water[i].money
+				water_out.push(`${water[i].name} ${water[i].money} ${water[i].currency}`).toFixed(0)
+
+				if (config[`rate_${water[i].currency}`]) {
+
+					const money_o = (water[i].money/config[`rate_${water[i].currency}`]).toFixed(0)
+				}
+
+				out_total += money_o
+			}
 		}
 
-		for (let i in total) {
+		const charge = config.charge
+
+		const out_should = in_total*(1+charge)
+
+		const out_need = out_should - out_total
+
+		let out_total_array = []
+
+		let out_should_array = []
+
+		let out_need_array = []
+
+		let rate_array = []
+
+		for (let currency in CURRENCYLIST) {
 			
-			if (total[i]) {
+			let rate = config[`rate_${currency}`]
 
-				water_total += i + ' ' + total[i] + ' ' + '|' + ' '
+			rate_array.push(`${CURRENCYLIST[currency]}(${currency})汇率：${rate}`)
+
+			if (rate) {
+
+				out_total_array.push(`${(out_total*rate).toFixed(0)}${currency}`)
+
+				out_should_array.push(`${(out_should*rate).toFixed(0)}${currency}`)
+
+				out_need_array.push(`${(out_need*rate).toFixed(0)}${currency}`)
 			}
 		}
 
-		const water_list = water_in + water_out + water_total
+		let water_text = '入款（' + count_in + '笔）：\n'+ water_in.join('\n') + '\n出款（' + count_out + '笔）：\n' + water_out.join('\n') + '\n费率：' + charge + '\n' + rate_array.join('\n') + '\n总入款：' + in_total + 'RMB\n总下发：' + out_total_array.join('|') + '\n应下发：' + out_should_array.join('|') + '\n余下发：' + out_need_array.join('|')
 
-		await API.sendMessage(token, { chat_id: cid, text: water_list })
+		await API.sendMessage(token, { chat_id: cid })
 
 	}catch(err){
 
@@ -796,7 +841,7 @@ module.exports = {
 
 		else if (await isCommand(text,'下发')) {
 
-			const money = 0 - text.split(' ')[1]
+			const money = text.split(' ')[1]
 
 			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
 
@@ -814,7 +859,7 @@ module.exports = {
 
 		else if (await isOut(text)) {
 
-			const money = text.split(' ')[0]
+			const money = 0 - text.split(' ')[0]
 
 			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
 
