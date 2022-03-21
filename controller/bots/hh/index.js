@@ -754,9 +754,12 @@ const getWater = async (token,message_id,from,chat,text) => {
 			
 			let rate = config[`rate_${currency}`]
 
-			rate_array.push(`${CURRENCYLIST[currency]}(${currency})汇率：${rate}`)
-
 			if (rate) {
+
+				if (currency!=='CNY') {
+					
+					rate_array.push(`${CURRENCYLIST[currency]}(${currency})汇率：${rate}`)
+				}
 
 				out_total_array.push(`${(out_total*rate).toFixed(0)}${currency}`)
 
