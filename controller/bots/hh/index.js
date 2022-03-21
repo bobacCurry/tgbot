@@ -710,7 +710,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				let money_i = 0
 
-				water_in.push(`${water[i].created_at} ${water[i].money} ${water[i].currency}`)
+				water_in.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${water[i].currency}`)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -727,7 +727,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				let money_o = 0
 
-				water_out.push(`${water[i].created_at} ${water[i].money} ${water[i].currency}`).toFixed(0)
+				water_out.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${water[i].currency}`).toFixed(0)
 
 				if (config[`rate_${water[i].currency}`]) {
 
