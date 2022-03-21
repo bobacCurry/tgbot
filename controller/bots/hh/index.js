@@ -710,11 +710,13 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				count_in++
 
+				let money_i = 0
+
 				water_in.push(`${water[i].name} ${water[i].money} ${water[i].currency}`)
 
 				if (config[`rate_${water[i].currency}`]) {
 
-					const money_i = (water[i].money/config[`rate_${water[i].currency}`])
+					money_i = (water[i].money/config[`rate_${water[i].currency}`])
 				}
 
 				in_total += money_i
@@ -725,11 +727,13 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				count_out++
 
+				let money_o = 0
+
 				water_out.push(`${water[i].name} ${water[i].money} ${water[i].currency}`).toFixed(0)
 
 				if (config[`rate_${water[i].currency}`]) {
 
-					const money_o = (water[i].money/config[`rate_${water[i].currency}`]).toFixed(0)
+					money_o = (water[i].money/config[`rate_${water[i].currency}`]).toFixed(0)
 				}
 
 				out_total += money_o
