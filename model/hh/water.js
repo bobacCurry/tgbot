@@ -22,9 +22,9 @@ const Water = new Schema({
 	//in or out
 	io: { type: String, required: true, index: true },
 
-	created_at: { type: Date, default: moment.format('YYYY-MM-DD HH:mm:ss') },
+	created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
 
-  	updated_at: { type: Date, default: moment.format('YYYY-MM-DD HH:mm:ss') } 
+  	updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') } 
 },
 {
 
