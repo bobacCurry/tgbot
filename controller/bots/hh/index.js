@@ -710,7 +710,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				let money_i = 0
 
-				water_in.push(`${water[i].name} ${water[i].money} ${water[i].currency}`)
+				water_in.push(`${water[i].money} ${water[i].currency}`)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -727,7 +727,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				let money_o = 0
 
-				water_out.push(`${water[i].name} ${water[i].money} ${water[i].currency}`).toFixed(0)
+				water_out.push(`${water[i].money} ${water[i].currency}`).toFixed(0)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -860,7 +860,7 @@ module.exports = {
 			await setWater(token,message_id,from,chat,money,currency,'i')
 		}
 
-		else if (await isOut(text)) {
+		else if (await isCommand(text,'-')) {
 
 			const money = 0 - text.split(' ')[0]
 
@@ -869,7 +869,7 @@ module.exports = {
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
 
-		else if (await isIn(text)) {
+		else if (await isCommand(text,'+')) {
 
 			const money = text.split(' ')[0]
 
