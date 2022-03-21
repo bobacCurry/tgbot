@@ -147,9 +147,9 @@ const start = async (token,message_id,from,chat,text) => {
 
 		5.记录下发：发送 <u><b>下发 数量 货币代码</b></u>(例：下发 200000 PHP) 或者 <u><b>-数量 货币代码</b></u>(例：-200000 PHP)\n
 
-		6.记录回款：发送 <u><b>回款 数量 货币代码</b></u>(例：回款 200000 PHP) 或者 <u><b>+数量 货币代码</b></u>(例：+200000 PHP)\n
+		6.记录入款：发送 <u><b>入款 数量 货币代码</b></u>(例：入款 200000 PHP) 或者 <u><b>+数量 货币代码</b></u>(例：+200000 PHP)\n
 
-		⚠️下发与回款，若不填写货币代码则默认为人民币(RMB)\n
+		⚠️下发与入款，若不填写货币代码则默认为人民币(RMB)\n
 
 		7.获取流水: 发送 <u><b>获取流水 日期（年-月-日）</b></u>(例：获取流水 2022-2-22)\n
 
@@ -641,11 +641,9 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 
 		await db_hh_water.create({ cid, uid, name, charge, rate, currency, money, io })
 
-		await API.sendMessage(token, { chat_id: cid, text: '✅数据录入成功' })
+		await getWater(token,message_id,from,chat,'')
 
 	}catch(err){
-
-		console.log(err)
 
 		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
 
@@ -742,7 +740,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 		const charge = config.charge
 
-		const out_should = in_total*(1+charge)
+		const out_should = in_total/(1+charge)
 
 		const out_need = out_should - out_total
 
@@ -773,13 +771,11 @@ const getWater = async (token,message_id,from,chat,text) => {
 			}
 		}
 
-		let water_text = '入款（' + count_in + '笔）：\n'+ water_in.join('\n') + '\n出款（' + count_out + '笔）：\n' + water_out.join('\n') + '\n\n费率：' + charge + '\n\n' + rate_array.join('\n') + '\n\n总入款：' + in_total + 'CNY\n\n总下发：' + out_total_array.join('|') + '\n\n应下发：' + out_should_array.join('|') + '\n\n余下发：' + out_need_array.join('|')
+		let water_text = '入款（' + count_in + '笔）：\n\n'+ water_in.join('\n') + '\n出款（' + count_out + '笔）：\n\n' + water_out.join('\n') + '\n\n费率：' + charge + '\n\n' + rate_array.join('\n') + '\n\n总入款：' + in_total + 'CNY\n\n总下发：' + out_total_array.join('|') + '\n\n应下发：' + out_should_array.join('|') + '\n\n余下发：' + out_need_array.join('|')
 
 		await API.sendMessage(token, { chat_id: cid, text: water_text })
 
 	}catch(err){
-
-		console.log(err)
 
 		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
 
@@ -857,7 +853,7 @@ module.exports = {
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
 
-		else if (await isCommand(text,'回款')) {
+		else if (await isCommand(text,'入款')) {
 
 			const money = text.split(' ')[1]
 
