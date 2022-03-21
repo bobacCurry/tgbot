@@ -2,6 +2,8 @@ const mongoose = require('../db.js')
 
 const Schema = mongoose.Schema
 
+const moment = require('moment')
+
 const Config = new Schema({
 
 	cid: { type: Number, required: true, index: true },
@@ -20,13 +22,13 @@ const Config = new Schema({
 
 	rate_THB: { type: Number, default: 0 },
 
-	created_at: { type: Date },
+	created_at: { type: Date, default: moment().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss') },
 
-  	updated_at: { type: Date } 
+  	updated_at: { type: Date, default: moment().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss') } 
 },
 {
 
-	versionKey: false, timestamps: { createdAt:'created_at',updatedAt:'updated_at' }
+	versionKey: false
 
 })
 
