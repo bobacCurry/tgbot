@@ -1,5 +1,7 @@
 const mongoose = require('../db.js')
 
+const moment = require('moment')
+
 const Schema = mongoose.Schema
 
 const Water = new Schema({
@@ -20,13 +22,13 @@ const Water = new Schema({
 	//in or out
 	io: { type: String, required: true, index: true },
 
-	created_at: { type: Date },
+	created_at: { type: Date, default: moment.format('YYYY-MM-DD HH:mm:ss') },
 
-  	updated_at: { type: Date } 
+  	updated_at: { type: Date, default: moment.format('YYYY-MM-DD HH:mm:ss') } 
 },
 {
 
-	versionKey: false, timestamps: { createdAt:'created_at',updatedAt:'updated_at' }
+	versionKey: false
 
 })
 
