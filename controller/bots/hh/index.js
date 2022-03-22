@@ -16,7 +16,9 @@ const API = require('../api')
 
 const ROLELIST = ['owner','admin','operator']
 
-const CURRENCYLIST = { 'CNY': '人民币','USDT': 'USDT','USD': '美元','PHP': '披索','MYR': '马币','THB': '泰铢' }
+const CURRENCYLIST = { 'CNY': '人民币','USDT': 'USDT','USD': '美元','PHP': '比索','MYR': '马币','THB': '泰铢' }
+
+const CURRENCYCODE = { '人民币': 'CNY','USDT': 'USDT','美元': 'USD','比索': 'PHP','马币': 'MYR','泰铢': 'THB' }
 
 const isGroup = (type) => {
 
@@ -143,7 +145,7 @@ const start = async (token,message_id,from,chat,text) => {
 
 		⚠️如不需要显示某货币汇率，请设置为0\n
 
-		⚠️支持货币：人民币(RMB)、美元(USD)、披索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
+		⚠️支持货币：人民币(RMB)、美元(USD)、比索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
 
 		5.记录下发：发送 <u><b>下发 数量 货币代码</b></u>(例：下发 200000 PHP) 或者 <u><b>-数量 货币代码</b></u>(例：-200000 PHP)\n
 
@@ -531,12 +533,14 @@ const setRate = async (token,message_id,from,chat,text) => {
 
 	let rate = text.split(' ')[2]
 
-	if (!currency||!CURRENCYLIST[currency]) {
+	if (!currency||!CURRENCYLIST[currency]||!CURRENCYCODE[currency]) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
 
 		return false
 	}
+
+	currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
 	if (currency==='CNY') {
 
@@ -846,7 +850,9 @@ module.exports = {
 
 			const money = text.split(' ')[1]
 
-			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+			let currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+
+			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
@@ -855,7 +861,9 @@ module.exports = {
 
 			const money = text.split(' ')[1]
 
-			const currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+			let currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+
+			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
 			await setWater(token,message_id,from,chat,money,currency,'i')
 		}
@@ -864,7 +872,9 @@ module.exports = {
 
 			const money = 0 - text.split(' ')[0]
 
-			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
+			let currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
+
+			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
@@ -873,7 +883,9 @@ module.exports = {
 
 			const money = text.split(' ')[0]
 
-			const currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
+			let currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
+
+			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
 			await setWater(token,message_id,from,chat,money,currency,'i')
 		}
