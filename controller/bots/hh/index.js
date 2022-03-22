@@ -157,6 +157,8 @@ const start = async (token,message_id,from,chat,text) => {
 
 		⚠️获取流水后可以填写某日日期获取该日流水，如不填写日期，则默认获取今日流水\n
 
+		8.清空数据: 发送 <u><b>清空数据</b></u> 将清空今天的数据
+
 		如有疑问请联系 @guevaratech
 	`
 
@@ -791,6 +793,48 @@ const getWater = async (token,message_id,from,chat,text) => {
     return true
 }
 
+const clearWater = async (token,message_id,from,chat) => {
+
+	const { id: uid, username, first_name, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	let start = moment().format('YYYY-MM-DD')
+
+	let end = moment(start).add(1, 'days').format('YYYY-MM-DD')
+
+	try{
+
+		await db_hh_water.deleteMany({ cid, created_at: { $gte: start, $lt: end } })
+
+		await API.sendMessage(token, { chat_id: cid, text: '清空数据成功' })
+
+		await getWater(token,message_id,from,chat,'')
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false
+	}
+
+	return true
+}
+
 module.exports = {
 	
 	index: async (req, res, next) =>{
@@ -890,6 +934,11 @@ module.exports = {
 			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
 			await setWater(token,message_id,from,chat,money,currency,'i')
+		}
+
+		else if (await isCommand(text,'清空数据')) {
+
+			await clearWater(token,message_id,from,chat)
 		}
 
 		return res.send('true')
