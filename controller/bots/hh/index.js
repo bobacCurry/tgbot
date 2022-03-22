@@ -775,7 +775,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 			}
 		}
 
-		let water_text = '入款（' + count_in + '笔）：\n\n'+ water_in.join('\n') + '\n出款（' + count_out + '笔）：\n\n' + water_out.join('\n') + '\n\n费率：' + charge + '\n\n' + rate_array.join('\n') + '\n\n总入款：' + in_total + 'CNY\n\n总下发：' + out_total_array.join('|') + '\n\n应下发：' + out_should_array.join('|') + '\n\n余下发：' + out_need_array.join('|')
+		let water_text = '入款（' + count_in + '笔）：\n\n'+ water_in.join('\n\n') + '\n\n出款（' + count_out + '笔）：\n\n' + water_out.join('\n\n') + '\n\n费率：' + charge + '\n\n' + rate_array.join('\n\n') + '\n\n总入款：' + in_total + 'CNY\n\n总下发：' + out_total_array.join('|') + '\n\n应下发：' + out_should_array.join('|') + '\n\n余下发：' + out_need_array.join('|')
 
 		await API.sendMessage(token, { chat_id: cid, text: water_text })
 
