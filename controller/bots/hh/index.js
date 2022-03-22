@@ -535,7 +535,7 @@ const setRate = async (token,message_id,from,chat,text) => {
 
 	currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
-	if (!currency||!CURRENCYLIST[currency]||!CURRENCYCODE[currency]) {
+	if (!currency||()!CURRENCYLIST[currency]) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
 
