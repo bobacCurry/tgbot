@@ -870,19 +870,18 @@ module.exports = {
 
 		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member } } = req.body
 
-		if (!text) {
-
-			return res.send('true')
-		}
-
-		console.log(req.body)
-
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
 
 			await start(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'/start')) {
+		if (!text) {
+
+			return res.send('true')
+		}
+
+
+		if (await isCommand(text,'/start')) {
 
 			await start(token,message_id,from,chat,text)
 		} 
