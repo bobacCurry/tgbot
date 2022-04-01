@@ -870,14 +870,14 @@ module.exports = {
 
 		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member } } = req.body
 
-		console.log(req.body)
-
 		if (!text) {
 
 			return res.send('true')
 		}
 
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
+
+			console.log(1111)
 
 			await start(token,message_id,from,chat,text)
 		}
