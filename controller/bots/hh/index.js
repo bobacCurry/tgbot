@@ -950,7 +950,11 @@ module.exports = {
 
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
 
-			await help(token,message_id,from,chat,text)
+			await db_hh_config.deleteMany({ cid })
+
+			await db_hh_config.create({ cid })
+
+			return await help(token,message_id,from,chat,text)
 		}
 
 		if (!text) {
@@ -958,9 +962,19 @@ module.exports = {
 			return res.send('true')
 		}
 
-		const { start }  = await db_hh_config.findOne({ cid: chat.id })
+		if (await isCommand(text,'/start')||await isCommand(text,'开启统计')) {
 
-		if (!start) {
+			await start(token,message_id,from,chat,text)
+		}
+
+		if (await isCommand(text,'/close')||await isCommand(text,'关闭统计')) {
+
+			await close(token,message_id,from,chat,text)
+		}
+
+		const config  = await db_hh_config.findOne({ cid: chat.id })
+
+		if (!config||!start) {
 
 			return res.send('true')
 		}
@@ -968,16 +982,6 @@ module.exports = {
 		if (await isCommand(text,'/help')) {
 
 			await help(token,message_id,from,chat,text)
-		} 
-
-		else if (await isCommand(text,'/start')||await isCommand(text,'开启统计')) {
-
-			await start(token,message_id,from,chat,text)
-		}
-
-		else if (await isCommand(text,'/close')||await isCommand(text,'关闭统计')) {
-
-			await close(token,message_id,from,chat,text)
 		}
 
 		else if (await isCommand(text,'添加超级')) {
