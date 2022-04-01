@@ -129,7 +129,7 @@ const start = async (token,message_id,from,chat,text) => {
 
 	const r_text = `
 
-		欢迎使用自助统计机器人！
+		<b>欢迎使用自助统计机器人！</b>
 		
 		换汇统计命令：\n
 
