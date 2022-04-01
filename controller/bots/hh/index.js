@@ -766,14 +766,14 @@ const getWater = async (token,message_id,from,chat,text) => {
 			
 			let rate = config[`rate_${currency}`]
 
-			if (currency!=='PHP') {
-
-				rate = Number((1/rate).toFixed(2))
-			}
-
-			console.log(rate)
-
 			if (rate) {
+
+				if (currency!=='PHP') {
+
+					rate = Number((1/rate).toFixed(2))
+				}
+
+				console.log(rate)
 
 				if (currency!=='CNY') {
 
