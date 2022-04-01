@@ -123,7 +123,7 @@ const isDate = (date) => {
 
 const start  = async (token,message_id,from,chat,text) => {
 
-	const { id: uid, is_bot } = from
+	const { id: uid, username, first_name, is_bot } = from
 
 	const { id: cid, type } = chat
 
@@ -160,7 +160,7 @@ const start  = async (token,message_id,from,chat,text) => {
 
 const close  = async (token,message_id,from,chat,text) => {
 
-	const { id: uid, is_bot } = from
+	const { id: uid, username, first_name, is_bot } = from
 
 	const { id: cid, type } = chat
 
