@@ -721,6 +721,13 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 			return false	
 		}
 
+		if (!config.start) {
+
+			await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请先开启统计' })
+
+			return false	
+		}
+
 		const rate = config[`rate_${currency}`]
 
 		if (!rate) {
@@ -975,26 +982,19 @@ module.exports = {
 			return res.send('true')
 		}
 
-		if (await isCommand(text,'/start')||await isCommand(text,'开启统计')) {
+		if (await isCommand(text,'/help')) {
+
+			await help(token,message_id,from,chat,text)
+		}
+
+		else if (await isCommand(text,'/start')||await isCommand(text,'开启统计')) {
 
 			await start(token,message_id,from,chat,text)
 		}
 
-		if (await isCommand(text,'/close')||await isCommand(text,'关闭统计')) {
+		else if (await isCommand(text,'/close')||await isCommand(text,'关闭统计')) {
 
 			await close(token,message_id,from,chat,text)
-		}
-
-		const config  = await db_hh_config.findOne({ cid: chat.id })
-
-		if (!config||!start) {
-
-			return res.send('true')
-		}
-
-		if (await isCommand(text,'/help')) {
-
-			await help(token,message_id,from,chat,text)
 		}
 
 		else if (await isCommand(text,'添加超级')) {
@@ -1016,7 +1016,9 @@ module.exports = {
 
 			await delAdmin(token,message_id,from,chat,text)
 		
-		} else if (await isCommand(text,'查询管理')) {
+		} 
+
+		else if (await isCommand(text,'查询管理')) {
 
 			await getAdmin(token,message_id,from,chat,text)
 		}
