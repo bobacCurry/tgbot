@@ -128,6 +128,8 @@ const start = async (token,message_id,from,chat,text) => {
 	const { id: cid, type } = chat
 
 	const r_text = `
+
+		欢迎使用自助统计机器人！
 		
 		换汇统计命令：\n
 
@@ -866,7 +868,7 @@ module.exports = {
 
 		const token = req.params.token
 
-		const { update_id, message: { message_id, from, chat, text, entities } } = req.body
+		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member } } = req.body
 
 		console.log(req.body)
 
@@ -875,7 +877,12 @@ module.exports = {
 			return res.send('true')
 		}
 
-		if (await isCommand(text,'/start')) {
+		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
+
+			await start(token,message_id,from,chat,text)
+		}
+
+		else if (await isCommand(text,'/start')) {
 
 			await start(token,message_id,from,chat,text)
 		} 
