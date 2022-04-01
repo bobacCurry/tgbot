@@ -779,8 +779,6 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 	let start = text.split(' ')[1]?text.split(' ')[1]:moment().add(8, 'hours').format('YYYY-MM-DD')
 
-	console.log(moment().format('YYYY-MM-DD HH:mm:ss'))
-
 	if (!isDate(start)) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，请输入正确的日期格式：年-月-日' })
