@@ -242,7 +242,16 @@ const help = async (token,message_id,from,chat,text) => {
 		如有疑问请联系 @guevaratech
 	`
 
-	await API.sendMessage(token, { chat_id: cid, parse_mode: 'HTML', text: r_text })
+	try{
+
+		await API.sendMessage(token, { chat_id: cid, parse_mode: 'HTML', text: r_text })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
 
 	return true
 }
@@ -958,7 +967,7 @@ module.exports = {
 
 			await db_hh_config.create({ cid: chat.id })
 
-			return await help(token,message_id,from,chat,text)
+			await help(token,message_id,from,chat,text)
 		}
 
 		if (!text) {
