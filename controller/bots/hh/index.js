@@ -868,12 +868,14 @@ module.exports = {
 
 		const token = req.params.token
 
-		const { update_id, message: { message_id, from, chat, text, entities }, new_chat_member } = req.body
+		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member } } = req.body
 
 		if (!text) {
 
 			return res.send('true')
 		}
+
+		console.log(new_chat_member)
 
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
 
