@@ -766,11 +766,13 @@ const getWater = async (token,message_id,from,chat,text) => {
 			
 			let rate = config[`rate_${currency}`]
 
+			let _rate = rate
+
 			if (rate) {
 
 				if (currency!=='PHP') {
 
-					rate = Number((1/rate).toFixed(2))
+					_rate = Number((1/rate).toFixed(2))
 				}
 
 				console.log(rate)
@@ -780,11 +782,11 @@ const getWater = async (token,message_id,from,chat,text) => {
 					rate_array.push(`${CURRENCYLIST[currency]}(${currency})汇率：${rate}`)
 				}
 
-				out_total_array.push(`${(out_total*rate).toFixed(0)}${CURRENCYLIST[currency]}`)
+				out_total_array.push(`${(out_total*_rate).toFixed(0)}${CURRENCYLIST[currency]}`)
 
-				out_should_array.push(`${(out_should*rate).toFixed(0)}${CURRENCYLIST[currency]}`)
+				out_should_array.push(`${(out_should*_rate).toFixed(0)}${CURRENCYLIST[currency]}`)
 
-				out_need_array.push(`${(out_need*rate).toFixed(0)}${CURRENCYLIST[currency]}`)
+				out_need_array.push(`${(out_need*_rate).toFixed(0)}${CURRENCYLIST[currency]}`)
 			}
 		}
 
