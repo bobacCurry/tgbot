@@ -121,7 +121,81 @@ const isDate = (date) => {
 	return false
 }
 
-const start = async (token,message_id,from,chat,text) => {
+const start  = async (token,message_id,from,chat,text) => {
+
+	const { id: uid, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	try{
+
+		const user = await db_hh_config.updateOne({ cid },{ start: true })
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '✅今日统计已开启' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+
+	return true
+
+}
+
+const close  = async (token,message_id,from,chat,text) => {
+
+	const { id: uid, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	try{
+
+		const user = await db_hh_config.updateOne({ cid },{ start: false })
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '✅今日统计已关闭' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+
+	return true
+
+}
+
+const help = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, is_bot } = from
 
@@ -160,6 +234,10 @@ const start = async (token,message_id,from,chat,text) => {
 		⚠️获取流水后可以填写某日日期获取该日流水，如不填写日期，则默认获取今日流水\n
 
 		8.清空数据: 发送 <u><b>清空数据</b></u> 将清空今天的数据
+
+		9.开启统计: 发送 <u><b>开启统计</b></u> 将开始统计今天的数据
+
+		10.关闭统计: 发送 <u><b>关闭统计</b></u> 将停止统计今天的数据
 
 		如有疑问请联系 @guevaratech
 	`
@@ -872,7 +950,7 @@ module.exports = {
 
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
 
-			await start(token,message_id,from,chat,text)
+			await help(token,message_id,from,chat,text)
 		}
 
 		if (!text) {
@@ -880,11 +958,27 @@ module.exports = {
 			return res.send('true')
 		}
 
+		const { start }  = await db_hh_config.findOne({ cid: chat.id })
 
-		if (await isCommand(text,'/start')) {
+		if (!start) {
+
+			return res.send('true')
+		}
+
+		if (await isCommand(text,'/help')) {
+
+			await help(token,message_id,from,chat,text)
+		} 
+
+		else if (await isCommand(text,'/start')||await isCommand(text,'开启统计')) {
 
 			await start(token,message_id,from,chat,text)
-		} 
+		}
+
+		else if (await isCommand(text,'/close')||await isCommand(text,'关闭统计')) {
+
+			await close(token,message_id,from,chat,text)
+		}
 
 		else if (await isCommand(text,'添加超级')) {
 

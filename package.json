@@ -4,6 +4,7 @@
     "body-parser": "^1.19.2",
     "express": "^4.17.3",
     "moment": "^2.29.1",
-    "mongoose": "^6.2.5"
+    "mongoose": "^6.2.5",
+    "node-schedule": "^2.1.0"
   }
 }
