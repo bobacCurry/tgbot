@@ -777,7 +777,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	let start = text.split(' ')[1]?text.split(' ')[1]:moment().format('YYYY-MM-DD')
+	let start = text.split(' ')[1]?text.split(' ')[1]:moment().add(8, 'hours').format('YYYY-MM-DD')
 
 	console.log(moment().format('YYYY-MM-DD HH:mm:ss'))
 
