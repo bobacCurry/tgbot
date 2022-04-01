@@ -868,7 +868,7 @@ module.exports = {
 
 		const token = req.params.token
 
-		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member } } = req.body
+		const { update_id, message: { message_id, from, chat, text, entities }, new_chat_member } = req.body
 
 		if (!text) {
 
@@ -876,8 +876,6 @@ module.exports = {
 		}
 
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
-
-			console.log(1111)
 
 			await start(token,message_id,from,chat,text)
 		}
