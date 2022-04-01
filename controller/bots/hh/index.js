@@ -18,7 +18,7 @@ const ROLELIST = ['owner','admin','operator']
 
 const CURRENCYLIST = { 'CNY': '人民币','USDT': 'USDT','USD': '美元','PHP': '比索','MYR': '马币','THB': '泰铢' }
 
-const CURRENCYCODE = { '人民币': 'CNY','USDT': 'USDT','美元': 'USD','比索': 'PHP','马币': 'MYR','泰铢': 'THB' }
+const CURRENCYCODE = { '人民币': 'CNY','u': 'USDT','USDT': 'USDT','美元': 'USD','比索': 'PHP','p': 'PHP','马币': 'MYR','泰铢': 'THB' }
 
 const isGroup = (type) => {
 
@@ -766,6 +766,13 @@ const getWater = async (token,message_id,from,chat,text) => {
 			
 			let rate = config[`rate_${currency}`]
 
+			if (currency!=='PHP') {
+
+				rate = Number((1/rate).toFixed(2))
+			}
+
+			console.log(rate)
+
 			if (rate) {
 
 				if (currency!=='CNY') {
@@ -844,6 +851,8 @@ module.exports = {
 		const token = req.params.token
 
 		const { update_id, message: { message_id, from, chat, text, entities } } = req.body
+
+		console.log(req.body)
 
 		if (!text) {
 
