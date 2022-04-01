@@ -950,13 +950,13 @@ module.exports = {
 
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
 
-			await db_hh_config.deleteMany({ cid })
+			await db_hh_config.deleteMany({ cid: chat.id })
 
-			await db_hh_water.deleteMany({ cid })
+			await db_hh_water.deleteMany({ cid: chat.id })
 
-			await db_hh_admin.deleteMany({ cid })
+			await db_hh_admin.deleteMany({ cid: chat.id })
 
-			await db_hh_config.create({ cid })
+			await db_hh_config.create({ cid: chat.id })
 
 			return await help(token,message_id,from,chat,text)
 		}
