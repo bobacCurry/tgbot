@@ -875,7 +875,7 @@ module.exports = {
 			return res.send('true')
 		}
 
-		console.log(new_chat_member)
+		console.log(req.body)
 
 		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
 
