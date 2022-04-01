@@ -22,13 +22,13 @@ const Water = new Schema({
 	//in or out
 	io: { type: String, required: true, index: true },
 
-	created_at: { type: Date, default: moment().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss') },
+	created_at: { type: Date },
 
-  	updated_at: { type: Date, default: moment().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss') } 
+  	updated_at: { type: Date } 
 },
 {
 
-	versionKey: false
+	versionKey: false, timestamps: { createdAt:'created_at',updatedAt:'updated_at'
 
 })
 

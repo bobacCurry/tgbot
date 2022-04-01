@@ -645,7 +645,9 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 
 		const name = username?`@${username}`:`@${first_name}`
 
-		await db_hh_water.create({ cid, uid, name, charge, rate, currency, money, io })
+		const created_at = updated_at = moment().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')
+
+		await db_hh_water.create({ cid, uid, name, charge, rate, currency, money, io, created_at, updated_at })
 
 		await getWater(token,message_id,from,chat,'')
 
