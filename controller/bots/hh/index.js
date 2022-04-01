@@ -952,6 +952,10 @@ module.exports = {
 
 			await db_hh_config.deleteMany({ cid })
 
+			await db_hh_water.deleteMany({ cid })
+
+			await db_hh_admin.deleteMany({ cid })
+
 			await db_hh_config.create({ cid })
 
 			return await help(token,message_id,from,chat,text)
