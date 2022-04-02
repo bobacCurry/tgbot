@@ -935,7 +935,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 			}
 		}
 
-		let water_text = '入款（' + count_in + '笔）：\n\n'+ water_in.join('\n\n') + '\n\n出款（' + count_out + '笔）：\n\n' + water_out.join('\n\n') + '\n\n费率：' + charge + '\n\n' + rate_array.join('\n\n') + '\n\n总入款：' + in_total + '人民币\n\n总下发：' + out_total_array.join(' | ') + '\n\n应下发：' + out_should_array.join(' | ') + '\n\n余下发：' + out_need_array.join(' | ')
+		let water_text = '入款（' + count_in + '笔）：\n\n'+ water_in.join('\n\n') + '\n\n出款（' + count_out + '笔）：\n\n' + water_out.join('\n\n') + '\n\n费率：' + charge + '\n\n' + rate_array.join('\n\n') + '\n\n总入款：' + in_total + '人民币\n\n应下发：' + out_should_array.join(' | ') + '\n\n总下发：' + out_total_array.join(' | ') + '\n\n余下发：' + out_need_array.join(' | ')
 
 		await API.sendMessage(token, { chat_id: cid, text: water_text })
 
@@ -979,7 +979,7 @@ const clearWater = async (token,message_id,from,chat) => {
 
 		await db_hh_water.deleteMany({ cid, created_at: { $gte: start, $lt: end } })
 
-		await API.sendMessage(token, { chat_id: cid, text: '清空账单成功' })
+		await API.sendMessage(token, { chat_id: cid, text: '✅清空账单成功' })
 
 		await getWater(token,message_id,from,chat,'')
 
