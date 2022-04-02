@@ -229,11 +229,11 @@ const help = async (token,message_id,from,chat,text) => {
 
 		⚠️下发与入款，若不填写货币代码则默认为人民币(RMB)\n
 
-		7.获取流水: 发送 <u><b>获取流水 日期（年-月-日）</b></u>(例：获取流水 2022-2-22)\n
+		7.获取账单: 发送 <u><b>获取账单 日期（年-月-日）</b></u>(例：获取账单 2022-2-22)\n
 
-		⚠️获取流水后可以填写某日日期获取该日流水，如不填写日期，则默认获取今日流水\n
+		⚠️获取账单后可以填写某日日期获取该日流水，如不填写日期，则默认获取今日账单\n
 
-		8.清空数据: 发送 <u><b>清空数据</b></u> 将清空今天的数据
+		8.清空账单: 发送 <u><b>清空账单</b></u> 将清空今天的账单
 
 		9.开启统计: 发送 <u><b>开启统计</b></u> 将开始统计今天的数据
 
@@ -600,6 +600,43 @@ const setCharge = async (token,message_id,from,chat,text) => {
 	return true
 }
 
+const reset = async (token,message_id,from,chat) => {
+
+	const { id: uid, username, first_name, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	try{
+
+		await db_hh_config.update({ cid },{ charge: 0, rate_CNY: 1, rate_USDT: 0, rate_USD:0, rate_PHP: 0, rate_MYR:0, rate_THB: 0 })
+
+		await API.sendMessage(token, { chat_id: cid, text: '✅重置设置成功' })
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+
+	return true
+
+}
+
 const setRate = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, username, first_name, is_bot } = from
@@ -942,7 +979,7 @@ const clearWater = async (token,message_id,from,chat) => {
 
 		await db_hh_water.deleteMany({ cid, created_at: { $gte: start, $lt: end } })
 
-		await API.sendMessage(token, { chat_id: cid, text: '清空数据成功' })
+		await API.sendMessage(token, { chat_id: cid, text: '清空账单成功' })
 
 		await getWater(token,message_id,from,chat,'')
 
@@ -997,6 +1034,21 @@ module.exports = {
 			await close(token,message_id,from,chat,text)
 		}
 
+		else if (await isCommand(text,'/bill')||await isCommand(text,'获取账单')){
+
+			await getWater(token,message_id,from,chat,text)
+		}
+
+		else if (await isCommand(text,'/clear')||await isCommand(text,'清空账单')) {
+
+			await clearWater(token,message_id,from,chat)
+		}
+
+		else if (await isCommand(text,'/reset')||await isCommand(text,'重置设置')) {
+
+			await reset(token,message_id,from,chat)
+		}
+
 		else if (await isCommand(text,'添加超级')) {
 
 			await addSuper(token,message_id,from,chat,text)
@@ -1031,11 +1083,6 @@ module.exports = {
 		else if (await isCommand(text,'设置汇率')) {
 
 			await setRate(token,message_id,from,chat,text)
-		}
-
-		else if (await isCommand(text,'获取流水')){
-
-			await getWater(token,message_id,from,chat,text)
 		}
 
 		else if (await isCommand(text,'下发')) {
@@ -1080,11 +1127,6 @@ module.exports = {
 			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
 
 			await setWater(token,message_id,from,chat,money,currency,'i')
-		}
-
-		else if (await isCommand(text,'清空数据')) {
-
-			await clearWater(token,message_id,from,chat)
 		}
 
 		return res.send('true')
