@@ -822,7 +822,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 					if (water[i].currency==='PHP') {
 
-						let _rate = Number((1/config[`rate_${water[i].currency}`]).toFixed(2))
+						let _rate = Number((1/config[`rate_${water[i].currency}`]).toFixed(6))
 					}
 
 					money_i = (water[i].money*_rate)
@@ -846,7 +846,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 					if (water[i].currency==='PHP') {
 
-						let _rate = Number((1/config[`rate_${water[i].currency}`]).toFixed(2))
+						let _rate = Number((1/config[`rate_${water[i].currency}`]).toFixed(6))
 					}
 
 					money_o = water[i].money*_rate
@@ -882,7 +882,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				if (currency!=='PHP') {
 
-					_rate = Number((1/rate).toFixed(2))
+					_rate = Number((1/rate).toFixed(6))
 				}
 
 				if (currency!=='CNY') {
