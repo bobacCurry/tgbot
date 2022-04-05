@@ -22,6 +22,8 @@ const Config = new Schema({
 
 	rate_THB: { type: Number, default: 0 },
 
+	point: { type: Boolean, default: false },
+
 	start: { type: Boolean, default: false },
 
 	created_at: { type: Date, default: moment().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss') },

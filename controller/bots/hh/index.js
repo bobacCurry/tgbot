@@ -546,6 +546,48 @@ const getAdmin = async (token,message_id,from,chat,text) => {
 	return true
 }
 
+
+const showPoint = async (token,message_id,from,chat,point) => {
+
+	const { id: uid, username, first_name, is_bot } = from
+
+	const { id: cid, type } = chat
+
+	if (!isGroup(type)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，该操作需要在群内进行' })
+
+		return false
+	}
+
+	if (!await isAdmin(cid,username,first_name)) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，需要管理员权限' })
+
+		return false
+	}
+
+	try{
+
+		await db_hh_config.updateOne({ cid }, { point })
+
+		if (point) {
+
+			await API.sendMessage(token, { chat_id: cid, text: '✅显示小数点' })
+		
+		}else{
+
+			await API.sendMessage(token, { chat_id: cid, text: '✅不显示小数点' })
+		}
+
+	}catch(err){
+
+		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
+
+    	return false  	
+    }
+}
+
 const setCharge = async (token,message_id,from,chat,text) => {
 
 	const { id: uid, username, first_name, is_bot } = from
@@ -843,6 +885,8 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 		let out_total = 0
 
+		const point = config.point ? 2 : 0
+
 		for (let i = water.length - 1; i >= 0; i--) {
 
 			if (water[i].io==='i') {
@@ -875,7 +919,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 				let money_o = 0
 
-				water_out.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${CURRENCYLIST[water[i].currency]}`).toFixed(0)
+				water_out.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${CURRENCYLIST[water[i].currency]}`).toFixed(point)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -893,7 +937,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 			}
 		}
 
-		in_total = in_total.toFixed(0)
+		in_total = in_total.toFixed(point)
 
 		const charge = config.charge
 
@@ -927,11 +971,11 @@ const getWater = async (token,message_id,from,chat,text) => {
 					rate_array.push(`${CURRENCYLIST[currency]}(${currency})汇率：${rate}`)
 				}
 
-				out_total_array.push(`${(out_total*_rate).toFixed(0)}${CURRENCYLIST[currency]}`)
+				out_total_array.push(`${(out_total*_rate).toFixed(point)}${CURRENCYLIST[currency]}`)
 
-				out_should_array.push(`${(out_should*_rate).toFixed(0)}${CURRENCYLIST[currency]}`)
+				out_should_array.push(`${(out_should*_rate).toFixed(point)}${CURRENCYLIST[currency]}`)
 
-				out_need_array.push(`${(out_need*_rate).toFixed(0)}${CURRENCYLIST[currency]}`)
+				out_need_array.push(`${(out_need*_rate).toFixed(point)}${CURRENCYLIST[currency]}`)
 			}
 		}
 
@@ -1047,6 +1091,16 @@ module.exports = {
 		else if (await isCommand(text,'/reset')||await isCommand(text,'重置设置')) {
 
 			await reset(token,message_id,from,chat)
+		}
+
+		else if (await isCommand(text,'/show_point')||await isCommand(text,'显示小数')) {
+
+			await showPoint(token,message_id,from,chat,true)
+		}
+
+		else if (await isCommand(text,'/no_point')||await isCommand(text,'不显示小数')) {
+
+			await showPoint(token,message_id,from,chat,false)
 		}
 
 		else if (await isCommand(text,'添加超级')) {
