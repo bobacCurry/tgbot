@@ -391,6 +391,8 @@ const addAdmin = async (token,message_id,from,chat,text) => {
 
 	const { id: cid, type } = chat
 
+	console.log(from,chat,text)
+
 	if (is_bot) {
 
 		return false
