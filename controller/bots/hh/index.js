@@ -20,6 +20,8 @@ const CURRENCYLIST = { 'CNY': '人民币','USDT': 'USDT','USD': '美元','PHP': 
 
 const CURRENCYCODE = { '人民币': 'CNY','u': 'USDT','USDT': 'USDT','美元': 'USD','比索': 'PHP','p': 'PHP','马币': 'MYR','泰铢': 'THB' }
 
+const BOTLIST = [ 'xinlianbangbot', 'huanhuibot' ]
+
 const isGroup = (type) => {
 
 	if (type==='group'||type==='supergroup') {
@@ -1053,7 +1055,7 @@ module.exports = {
 
 		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member } } = req.body
 
-		if (new_chat_member&&(new_chat_member.username==='huanhuibot')) {
+		if (new_chat_member&&(BOTLIST.indexOf(new_chat_member.username)!==-1)) {
 
 			await db_hh_config.deleteMany({ cid: chat.id })
 
