@@ -239,6 +239,14 @@ const help = async (token,message_id,from,chat,text) => {
 
 		10.关闭统计: 发送 <u><b>关闭统计</b></u> 将停止统计今天的数据
 
+		11.显示小数: 发送 <u><b>显示小数</b></u> 显示小数点
+
+		12.不显示小数: 发送 <u><b>不显示小数</b></u> 不显示小数
+
+		13.清空账单: 发送 <u><b>清空账单</b></u> 将清空今日账单
+
+		14.重置设置: 发送 <u><b>重置设置</b></u> 将重置统计设置
+
 		如有疑问请联系 @guevaratech
 	`
 
@@ -664,7 +672,7 @@ const reset = async (token,message_id,from,chat) => {
 
 	try{
 
-		await db_hh_config.update({ cid },{ charge: 0, rate_CNY: 1, rate_USDT: 0, rate_USD:0, rate_PHP: 0, rate_MYR:0, rate_THB: 0 })
+		await db_hh_config.update({ cid },{ charge: 0, rate_CNY: 1, rate_USDT: 0, rate_USD:0, rate_PHP: 0, rate_MYR:0, rate_THB: 0, point: false })
 
 		await API.sendMessage(token, { chat_id: cid, text: '✅重置设置成功' })
 
