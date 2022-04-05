@@ -1071,17 +1071,17 @@ module.exports = {
 			return res.send('true')
 		}
 
-		if (await isCommand(text,'/help')) {
+		if (await isCommand(text,'/help')||await isCommand(text,'/start')) {
 
 			await help(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'/start')||await isCommand(text,'开启统计')) {
+		else if (await isCommand(text,'/run')||await isCommand(text,'开启统计')) {
 
 			await start(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'/close')||await isCommand(text,'关闭统计')) {
+		else if (await isCommand(text,'/stop')||await isCommand(text,'关闭统计')) {
 
 			await close(token,message_id,from,chat,text)
 		}
