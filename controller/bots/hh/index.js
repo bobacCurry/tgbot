@@ -940,6 +940,8 @@ const getWater = async (token,message_id,from,chat,text) => {
 						let _rate = Number((1/config[`rate_${water[i].currency}`]).toFixed(6))
 					}
 
+					console.log(_rate,water[i].currency)
+
 					money_o = water[i].money*_rate
 				}
 
