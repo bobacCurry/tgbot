@@ -1075,6 +1075,8 @@ module.exports = {
 			return res.send('true')
 		}
 
+		console.log(text)
+
 		if (await isCommand(text,'/help')||await isCommand(text,'/start')) {
 
 			await help(token,message_id,from,chat,text)
