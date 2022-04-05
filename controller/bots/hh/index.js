@@ -1093,7 +1093,7 @@ module.exports = {
 			await reset(token,message_id,from,chat)
 		}
 
-		else if (await isCommand(text,'/show_point')||await isCommand(text,'显示小数')) {
+		else if (await isCommand(text,'/point')||await isCommand(text,'显示小数')) {
 
 			await showPoint(token,message_id,from,chat,true)
 		}
