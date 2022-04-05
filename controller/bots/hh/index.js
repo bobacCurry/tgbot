@@ -391,8 +391,6 @@ const addAdmin = async (token,message_id,from,chat,text) => {
 
 	const { id: cid, type } = chat
 
-	console.log(from,chat,text)
-
 	if (is_bot) {
 
 		return false
@@ -997,8 +995,6 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 	}catch(err){
 
-		console.log(err)
-
 		await API.sendMessage(token, { chat_id: chat.id, text: '⚠️系统错误，请联系 @guevaratech' })
 
     	return false
@@ -1074,8 +1070,6 @@ module.exports = {
 
 			return res.send('true')
 		}
-
-		console.log(text)
 
 		if (await isCommand(text,'/help')||await isCommand(text,'/start')) {
 
