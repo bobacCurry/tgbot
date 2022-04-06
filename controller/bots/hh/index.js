@@ -1178,7 +1178,7 @@ module.exports = {
 
 			const money = data[1]
 
-			const currency = data[2]?CURRENCYCODE[set[2]]:'CNY'
+			const currency = data[2]?CURRENCYCODE[data[2]]:'CNY'
 
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
@@ -1194,7 +1194,7 @@ module.exports = {
 
 			const money = data[1]
 
-			const currency = data[2]?CURRENCYCODE[set[2]]:'CNY'
+			const currency = data[2]?CURRENCYCODE[data[2]]:'CNY'
 
 			await setWater(token,message_id,from,chat,money,currency,'i')
 		}
