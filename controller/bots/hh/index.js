@@ -1068,8 +1068,6 @@ module.exports = {
 			return res.send('true')
 		}
 
-		console.log(text,/^查询管理$/.test(text))
-
 		if (await isCommand(text,'/help')||await isCommand(text,'/start')) {
 
 			await help(token,message_id,from,chat,text)
@@ -1163,13 +1161,11 @@ module.exports = {
 
 		else if (/^下发(\d+\.{0,1}\d*)(.*)$/.test(text)||/^\-(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
+			let data = text.match(/^\-(\d+\.{0,1}\d*)(.*)$/)
+
 			if (/^下发(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-				const data = text.match(/^下发(\d+\.{0,1}\d*)(.*)$/)
-
-			}else{
-
-				const data = text.match(/^\-(\d+\.{0,1}\d*)(.*)$/)
+				data = text.match(/^下发(\d+\.{0,1}\d*)(.*)$/)
 			}
 
 			const money = data[1]
@@ -1181,13 +1177,11 @@ module.exports = {
 
 		else if (/^入款(\d+\.{0,1}\d*)(.*)$/.test(text)||/^\+(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
+			let data = text.match(/^\+(\d+\.{0,1}\d*)(.*)$/)
+
 			if (/^入款(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-				const data = text.match(/^入款(\d+\.{0,1}\d*)(.*)$/)
-
-			}else{
-
-				const data = text.match(/^\+(\d+\.{0,1}\d*)(.*)$/)
+				data = text.match(/^入款(\d+\.{0,1}\d*)(.*)$/)
 			}
 
 			const money = data[1]
