@@ -224,27 +224,27 @@ const help = async (token,message_id,from,chat,text) => {
 		
 		换汇统计命令：\n
 
-		1.添加管理：发送 <u><b>添加管理@用户名</b></u>\n
+		1.添加管理：发送 <u><b>添加管理 @用户名</b></u>\n
 
-		2.删除管理：发送 <u><b>删除管理@用户名</b></u>\n
+		2.删除管理：发送 <u><b>删除管理 @用户名</b></u>\n
 
 		⚠️添加的管理的行为必须在某一个群中进行\n
 		
-		3.设置费率：发送 <u><b>设置费率X.XX%</b></u> (例：设置费率5%)\n
+		3.设置费率：例：设置费率5%\n
 		
-		4.设置汇率：发送 <u><b>设置货币代码汇率</b></u> (例：设置美金汇率7.8)\n
+		4.设置汇率：例：设置美金汇率7.8\n
 
 		⚠️如不需要显示某货币汇率，请设置为0\n
 
 		⚠️支持货币：人民币(RMB)、美元(USD)、比索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
 
-		5.记录下发：发送 <u><b>下发 数量 货币代码</b></u>(例：下发200000p) 或者 <u><b>-数量 货币代码</b></u>(例：-200000p)\n
+		5.记录下发：例：下发200000p 或者 -200000p\n
 
-		6.记录入款：发送 <u><b>入款 数量 货币代码</b></u>(例：入款200000u) 或者 <u><b>+数量 货币代码</b></u>(例：+200000u)\n
+		6.记录入款：例：入款200000u 或者 +200000u\n
 
 		⚠️下发与入款，若不填写货币代码则默认为人民币(RMB)\n
 
-		7.获取账单: 发送 <u><b>获取账单 日期（年-月-日）</b></u>(例：获取账单 2022-2-22)\n
+		7.获取账单: 发送 <u><b>获取账单</b></u>\n
 
 		⚠️获取账单后可以填写某日日期获取该日流水，如不填写日期，则默认获取今日账单\n
 
@@ -1068,6 +1068,8 @@ module.exports = {
 			return res.send('true')
 		}
 
+		console.log(text,/^查询管理$/.test(text))
+
 		if (await isCommand(text,'/help')||await isCommand(text,'/start')) {
 
 			await help(token,message_id,from,chat,text)
@@ -1108,7 +1110,7 @@ module.exports = {
 			await showPoint(token,message_id,from,chat,false)
 		}
 
-		else if ((/^查询管理$/.test(text))) {
+		else if (/^查询管理$/.test(text)) {
 
 			await getAdmin(token,message_id,from,chat,text)
 		}
