@@ -956,7 +956,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 		const charge = config.charge
 
-		const out_should = in_total/(1+charge)
+		const out_should = in_total*100/(100+charge)
 
 		const out_need = out_should - out_total
 
