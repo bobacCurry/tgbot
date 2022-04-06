@@ -18,7 +18,24 @@ const ROLELIST = ['owner','admin','operator']
 
 const CURRENCYLIST = { 'CNY': '人民币','USDT': 'USDT','USD': '美元','PHP': '比索','MYR': '马币','THB': '泰铢' }
 
-const CURRENCYCODE = { '人民币': 'CNY','u': 'USDT','USDT': 'USDT','美元': 'USD','比索': 'PHP','p': 'PHP','马币': 'MYR','泰铢': 'THB' }
+const CURRENCYCODE = { 
+	'CNY': 'CNY',
+	'USDT': 'USDT',
+	'USD': 'USD',
+	'MYR': 'MYR',
+	'THB': 'THB',
+	'人民币': 'CNY',
+	'u': 'USDT',
+	'usdt': 'USDT',
+	'美元': 'USD',
+	'美金': 'USD',
+	'美刀': 'USD',
+	'比索': 'PHP',
+	'披索': 'PHP',
+	'p': 'PHP',
+	'马币': 'MYR',
+	'泰铢': 'THB' 
+}
 
 const BOTLIST = [ 'xinlianbangbot', 'huanhuibot' ]
 
@@ -48,8 +65,6 @@ const isCommand  = async (text,command) => {
 
 	return false
 }
-
-
 
 const isSuper = async (username) => {
 
@@ -209,25 +224,23 @@ const help = async (token,message_id,from,chat,text) => {
 		
 		换汇统计命令：\n
 
-		1.添加管理：发送 <u><b>添加管理 @用户名</b></u>\n
+		1.添加管理：发送 <u><b>添加管理@用户名</b></u>\n
 
-		2.删除管理：发送 <u><b>删除管理 @用户名</b></u>\n
+		2.删除管理：发送 <u><b>删除管理@用户名</b></u>\n
 
 		⚠️添加的管理的行为必须在某一个群中进行\n
 		
-		3.设置费率：发送 <u><b>设置费率 X.XX</b></u> (例：设置费率 0.05)\n
+		3.设置费率：发送 <u><b>设置费率X.XX%</b></u> (例：设置费率5%)\n
 		
-		4.设置汇率：发送 <u><b>设置汇率 货币代码 汇率</b></u> (例：设置汇率 PHP 7.8)\n
-
-		⚠️汇率 = 1RMB可以兑换的其他货币的值\n
+		4.设置汇率：发送 <u><b>设置货币代码汇率</b></u> (例：设置美金汇率7.8)\n
 
 		⚠️如不需要显示某货币汇率，请设置为0\n
 
 		⚠️支持货币：人民币(RMB)、美元(USD)、比索(PHP)、马币(MYR)、泰铢(THB)、USDT(USDT)\n
 
-		5.记录下发：发送 <u><b>下发 数量 货币代码</b></u>(例：下发 200000 PHP) 或者 <u><b>-数量 货币代码</b></u>(例：-200000 PHP)\n
+		5.记录下发：发送 <u><b>下发 数量 货币代码</b></u>(例：下发200000p) 或者 <u><b>-数量 货币代码</b></u>(例：-200000p)\n
 
-		6.记录入款：发送 <u><b>入款 数量 货币代码</b></u>(例：入款 200000 PHP) 或者 <u><b>+数量 货币代码</b></u>(例：+200000 PHP)\n
+		6.记录入款：发送 <u><b>入款 数量 货币代码</b></u>(例：入款200000u) 或者 <u><b>+数量 货币代码</b></u>(例：+200000u)\n
 
 		⚠️下发与入款，若不填写货币代码则默认为人民币(RMB)\n
 
@@ -285,7 +298,7 @@ const help = async (token,message_id,from,chat,text) => {
 //   }
 
 
-const addSuper = async (token,message_id,from,chat,text) => {
+const addSuper = async (token,message_id,from,chat,username) => {
 
 	const { id: uid, is_bot } = from
 
@@ -300,8 +313,6 @@ const addSuper = async (token,message_id,from,chat,text) => {
 
 		return false
 	}
-
-	let username = text.split(' ')[1]
 
 	if (!username) {
 
@@ -339,7 +350,7 @@ const addSuper = async (token,message_id,from,chat,text) => {
 	return true
 }
 
-const delSuper = async (token,message_id,from,chat,text) => {
+const delSuper = async (token,message_id,from,chat,username) => {
 
 	const { id: uid, is_bot } = from
 
@@ -354,8 +365,6 @@ const delSuper = async (token,message_id,from,chat,text) => {
 
 		return false
 	}
-
-	let username = text.split(' ')[1]
 
 	if (!username) {
 
@@ -385,7 +394,7 @@ const delSuper = async (token,message_id,from,chat,text) => {
 
 }
 
-const addAdmin = async (token,message_id,from,chat,text) => {
+const addAdmin = async (token,message_id,from,chat,name) => {
 
 	const { id: uid, username, is_bot } = from
 
@@ -411,8 +420,6 @@ const addAdmin = async (token,message_id,from,chat,text) => {
 
 		return false
 	}
-
-	let name = text.split(' ')[1]
 
 	if (!name) {
 
@@ -450,7 +457,7 @@ const addAdmin = async (token,message_id,from,chat,text) => {
 	return true
 }
 
-const delAdmin = async (token,message_id,from,chat,text) => {
+const delAdmin = async (token,message_id,from,chat,name) => {
 
 	const { id: uid, username, is_bot } = from
 
@@ -476,8 +483,6 @@ const delAdmin = async (token,message_id,from,chat,text) => {
 
 		return false
 	}
-
-	let name = text.split(' ')[1]
 
 	if (!name) {
 
@@ -598,7 +603,7 @@ const showPoint = async (token,message_id,from,chat,point) => {
     }
 }
 
-const setCharge = async (token,message_id,from,chat,text) => {
+const setCharge = async (token,message_id,from,chat,charge) => {
 
 	const { id: uid, username, first_name, is_bot } = from
 
@@ -617,8 +622,6 @@ const setCharge = async (token,message_id,from,chat,text) => {
 
 		return false
 	}
-
-	let charge = text.split(' ')[1]
 
 	if (isNaN(charge)) {
 
@@ -689,7 +692,7 @@ const reset = async (token,message_id,from,chat) => {
 
 }
 
-const setRate = async (token,message_id,from,chat,text) => {
+const setRate = async (token,message_id,from,chat,currency,rate) => {
 
 	const { id: uid, username, first_name, is_bot } = from
 
@@ -709,20 +712,14 @@ const setRate = async (token,message_id,from,chat,text) => {
 		return false
 	}
 
-	let currency = text.split(' ')[1]
-
-	let rate = text.split(' ')[2]
-
-	currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
-
-	if (!currency||!CURRENCYLIST[currency]) {
+	if (!CURRENCYCODE[currency]) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
 
 		return false
 	}
 
-	if (currency==='CNY') {
+	if (CURRENCYCODE[currency]==='CNY') {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，人民币为默认货币' })
 
@@ -740,7 +737,7 @@ const setRate = async (token,message_id,from,chat,text) => {
 
 		let update = {}
 
-		update[`rate_${currency}`] = rate
+		update[`rate_${CURRENCYCODE[currency]}`] = rate
 
 		const chat = await db_hh_config.findOne({ cid })
 
@@ -785,7 +782,7 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 		return false
 	}
 
-	if (!CURRENCYLIST[currency]) {
+	if (!currency) {
 
 		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，货币为未知货币' })
 
@@ -1076,12 +1073,12 @@ module.exports = {
 			await help(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'/run')||await isCommand(text,'开启统计')) {
+		else if (await isCommand(text,'/run')||(/^开启统计$/.test(text))) {
 
 			await start(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'/stop')||await isCommand(text,'关闭统计')) {
+		else if (await isCommand(text,'/stop')||(/^关闭统计$/.test(text))) {
 
 			await close(token,message_id,from,chat,text)
 		}
@@ -1091,102 +1088,109 @@ module.exports = {
 			await getWater(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'/clear')||await isCommand(text,'清空账单')) {
+		else if (await isCommand(text,'/clear')||(/^清空账单$/.test(text))) {
 
 			await clearWater(token,message_id,from,chat)
 		}
 
-		else if (await isCommand(text,'/reset')||await isCommand(text,'重置设置')) {
+		else if (await isCommand(text,'/reset')||(/^重置设置$/.test(text))) {
 
 			await reset(token,message_id,from,chat)
 		}
 
-		else if (await isCommand(text,'/point')||await isCommand(text,'显示小数')) {
+		else if (await isCommand(text,'/point')||(/^显示小数$/.test(text))) {
 
 			await showPoint(token,message_id,from,chat,true)
 		}
 
-		else if (await isCommand(text,'/no_point')||await isCommand(text,'不显示小数')) {
+		else if (await isCommand(text,'/no_point')||(/^不显示小数$/.test(text))) {
 
 			await showPoint(token,message_id,from,chat,false)
 		}
 
-		else if (await isCommand(text,'添加超级')) {
-
-			await addSuper(token,message_id,from,chat,text)
-		} 
-
-		else if (await isCommand(text,'删除超级')) {
-
-			await delSuper(token,message_id,from,chat,text)
-		} 
-
-		else if (await isCommand(text,'添加管理')) {
-
-			await addAdmin(token,message_id,from,chat,text)		
-		} 
-
-		else if (await isCommand(text,'删除管理')) {
-
-			await delAdmin(token,message_id,from,chat,text)
-		
-		} 
-
-		else if (await isCommand(text,'查询管理')) {
+		else if ((/^查询管理$/.test(text))) {
 
 			await getAdmin(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'设置费率')) {
+		else if (/^添加超级(.+)/.test(text)) {
 
-			await setCharge(token,message_id,from,chat,text)
+			const username = text.match(/^添加超级(.+)/)[1]
+
+			await addSuper(token,message_id,from,chat,username)
+		} 
+
+		else if (/^删除超级(.+)/.test(text)) {
+
+			const username = text.match(/^删除超级(.+)/)[1]
+
+			await delSuper(token,message_id,from,chat,username)
+		} 
+
+		else if (/^添加管理(.+)/.test(text)) {
+
+			const name = text.match(/^添加管理(.+)/)[1]
+
+			await addAdmin(token,message_id,from,chat,name)		
+		} 
+
+		else if (/^删除管理(.+)/.test(text)) {
+
+			const name = text.match(/^删除管理(.+)/)[1]
+
+			await delAdmin(token,message_id,from,chat,name)
+		} 
+
+		else if (/^设置费率(\d+\.{0,1}\d*)%$/.test(text)) {
+
+			const charge = text.match(/^设置费率(\d+\.{0,1}\d*)%$/)[1]
+
+			await setCharge(token,message_id,from,chat,charge)
 		}
 
-		else if (await isCommand(text,'设置汇率')) {
+		else if (/^设置(.+)汇率(\d+\.{0,1}\d*)$/.test(text)) {
 
-			await setRate(token,message_id,from,chat,text)
+			const data = text.match(/^设置(.+)汇率(\d+\.{0,1}\d*)$/)
+
+			const currency = data[1]
+
+			const rate = data[2]
+
+			await setRate(token,message_id,from,chat,currency,rate)
 		}
 
-		else if (await isCommand(text,'下发')) {
+		else if (/^下发(\d+\.{0,1}\d*)(.*)$/.test(text)||/^\-(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-			const money = text.split(' ')[1]
+			if (/^下发(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-			let currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+				const data = text.match(/^下发(\d+\.{0,1}\d*)(.*)$/)
 
-			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
+			}else{
+
+				const data = text.match(/^\-(\d+\.{0,1}\d*)(.*)$/)
+			}
+
+			const money = data[1]
+
+			const currency = data[2]?CURRENCYCODE[set[2]]:'CNY'
 
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
 
-		else if (await isCommand(text,'入款')) {
+		else if (/^入款(\d+\.{0,1}\d*)(.*)$/.test(text)||/^\+(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-			const money = text.split(' ')[1]
+			if (/^入款(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-			let currency = text.split(' ')[2]?text.split(' ')[2]:'CNY'
+				const data = text.match(/^入款(\d+\.{0,1}\d*)(.*)$/)
 
-			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
+			}else{
 
-			await setWater(token,message_id,from,chat,money,currency,'i')
-		}
+				const data = text.match(/^\+(\d+\.{0,1}\d*)(.*)$/)
+			}
 
-		else if (await isCommand(text,'-')) {
+			const money = data[1]
 
-			const money = 0 - text.split(' ')[0]
-
-			let currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
-
-			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
-
-			await setWater(token,message_id,from,chat,money,currency,'o')
-		}
-
-		else if (await isCommand(text,'+')) {
-
-			const money = text.split(' ')[0]
-
-			let currency = text.split(' ')[1]?text.split(' ')[1]:'CNY'
-
-			currency = CURRENCYLIST[currency]?currency:CURRENCYCODE[currency]
+			const currency = data[2]?CURRENCYCODE[set[2]]:'CNY'
 
 			await setWater(token,message_id,from,chat,money,currency,'i')
 		}
