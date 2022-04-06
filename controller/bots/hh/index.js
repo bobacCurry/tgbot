@@ -325,6 +325,8 @@ const addSuper = async (token,message_id,from,chat,username) => {
 
 	username = username.toLowerCase()
 
+	username = username.trim()
+
 	try{
 
 		const user = await db_hh_super.findOne({ username })
@@ -376,6 +378,8 @@ const delSuper = async (token,message_id,from,chat,username) => {
 	username = username.replace('@','')
 
 	username = username.toLowerCase()
+
+	username = username.trim()
 
 	try{
 
@@ -431,6 +435,8 @@ const addAdmin = async (token,message_id,from,chat,name) => {
 	name = name.replace('@','')
 
 	name = name.toLowerCase()
+
+	name = name.trim()
 
 	try{
 
@@ -494,6 +500,8 @@ const delAdmin = async (token,message_id,from,chat,name) => {
 	name = name.replace('@','')
 
 	name = name.toLowerCase()
+
+	name = name.trim()
 
 	try{
 
