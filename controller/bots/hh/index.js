@@ -919,7 +919,7 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 				let money_i = 0
 
-				water_in.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${CURRENCYLIST[water[i].currency]}`)
+				water_in.push(`<a>${moment(water[i].created_at).format('HH:mm:ss')}</a> ${water[i].money} ${CURRENCYLIST[water[i].currency]}`)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -941,7 +941,7 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 				let money_o = 0
 
-				water_out.push(`${moment(water[i].created_at).format('HH:mm:ss')} ${water[i].money} ${CURRENCYLIST[water[i].currency]}`).toFixed(point)
+				water_out.push(`<a>${moment(water[i].created_at).format('HH:mm:ss')}<a> ${water[i].money} ${CURRENCYLIST[water[i].currency]}`).toFixed(point)
 
 				if (config[`rate_${water[i].currency}`]) {
 
@@ -1001,7 +1001,7 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 			}
 		}
 
-		let water_text = '入款（' + count_in + '笔）：\n'+ water_in.join('\n') + '\n\n出款（' + count_out + '笔）：\n' + water_out.join('\n') + '\n\n费率：' + charge + '\n' + rate_array.join('\n') + '\n\n总入款：' + in_total + '人民币\n\n应下发：' + out_should_array.join(' | ') + '\n\n总下发：' + out_total_array.join(' | ') + '\n\n余下发：' + out_need_array.join(' | ')
+		let water_text = '入款（' + count_in + '笔）：\n'+ water_in.join('\n') + '\n\n出款（' + count_out + '笔）：\n' + water_out.join('\n') + '\n\n费率：' + charge + '\n' + rate_array.join('\n') + '\n总入款：' + in_total + '人民币\n应下发：' + out_should_array.join(' | ') + '\n总下发：' + out_total_array.join(' | ') + '\n余下发：' + out_need_array.join(' | ')
 
 		await API.sendMessage(token, { chat_id: cid, text: water_text })
 
