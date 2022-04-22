@@ -1065,8 +1065,6 @@ module.exports = {
 
 		const { update_id, message, callback_query } = req.body
 
-		console.log(req.body)
-
 		if (callback_query&&callback_query.message&&callback_query.data==='/bill') {
 
 			const from = callback_query.from
