@@ -1069,7 +1069,9 @@ module.exports = {
 
 		if (callback_query&&callback_query.message&&callback_query.data==='/bill') {
 
-			const { message_id, from, chat } = callback_query.message
+			const from = callback_query.from
+
+			const { message_id, chat } = callback_query.message
 
 			await getWater(token,message_id,from,chat,'',true)
 
