@@ -1063,11 +1063,13 @@ module.exports = {
 
 		const token = req.params.token
 
-		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member }, callback_query } = req.body
+		const { update_id, message, callback_query } = req.body
 
 		console.log(req.body)
 
 		return res.send('true')
+
+		const { message_id, from, chat, text, entities, new_chat_member } = message
 
 		if (new_chat_member&&(BOTLIST.indexOf(new_chat_member.username)!==-1)) {
 
