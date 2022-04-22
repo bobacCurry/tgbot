@@ -244,7 +244,7 @@ const help = async (token,message_id,from,chat,text) => {
 
 		⚠️下发与入款，若不填写货币代码则默认为人民币(RMB)\n
 
-		7.获取账单: 发送 <u><b>获取账单</b></u>\n
+		7.获取完整账单: 发送 <u><b>获取完整账单</b></u>\n
 
 		⚠️获取账单后可以填写某日日期获取该日流水，如不填写日期，则默认获取今日账单\n
 
@@ -851,7 +851,7 @@ const setWater = async (token,message_id,from,chat,money,currency,io) => {
 	return true
 }
 
-const getWater = async (token,message_id,from,chat,text) => {
+const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 	const { id: uid, username, first_name, is_bot } = from
 
@@ -884,7 +884,18 @@ const getWater = async (token,message_id,from,chat,text) => {
 
 	try{
 
-		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1, created_at:1 })
+		let limit = 5
+
+		if (all) {
+
+			limit = 100000
+		}
+
+		const water_i = await db_hh_water.find({ cid, io:'i', created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1, created_at:1 }).limit(limit).sort({ created_at: -1 })
+
+		const water_o = await db_hh_water.find({ cid, io:'o', created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1, created_at:1 }).limit(limit).sort({ created_at: -1 })
+
+		const water = [...water_i,...water_o]
 
 		const config  = await db_hh_config.findOne({ cid })
 
@@ -994,7 +1005,7 @@ const getWater = async (token,message_id,from,chat,text) => {
 			}
 		}
 
-		let water_text = '入款（' + count_in + '笔）：\n\n'+ water_in.join('\n\n') + '\n\n出款（' + count_out + '笔）：\n\n' + water_out.join('\n\n') + '\n\n费率：' + charge + '\n\n' + rate_array.join('\n\n') + '\n\n总入款：' + in_total + '人民币\n\n应下发：' + out_should_array.join(' | ') + '\n\n总下发：' + out_total_array.join(' | ') + '\n\n余下发：' + out_need_array.join(' | ')
+		let water_text = '入款（' + count_in + '笔）：\n'+ water_in.join('\n') + '\n出款（' + count_out + '笔）：\n' + water_out.join('\n') + '\n费率：' + charge + '\n' + rate_array.join('\n') + '\n总入款：' + in_total + '人民币\n应下发：' + out_should_array.join(' | ') + '\n总下发：' + out_total_array.join(' | ') + '\n余下发：' + out_need_array.join(' | ')
 
 		await API.sendMessage(token, { chat_id: cid, text: water_text })
 
@@ -1091,9 +1102,9 @@ module.exports = {
 			await close(token,message_id,from,chat,text)
 		}
 
-		else if (await isCommand(text,'/bill')||await isCommand(text,'获取账单')){
+		else if (await isCommand(text,'/bill')||await isCommand(text,'获取完整账单')){
 
-			await getWater(token,message_id,from,chat,text)
+			await getWater(token,message_id,from,chat,text,true)
 		}
 
 		else if (await isCommand(text,'/clear')||(/^清空账单$/.test(text))) {
