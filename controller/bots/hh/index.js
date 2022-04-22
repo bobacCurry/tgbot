@@ -1063,7 +1063,7 @@ module.exports = {
 
 		const token = req.params.token
 
-		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member } } = req.body
+		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member }, callback_query } = req.body
 
 		if (new_chat_member&&(BOTLIST.indexOf(new_chat_member.username)!==-1)) {
 
@@ -1077,6 +1077,8 @@ module.exports = {
 
 			await help(token,message_id,from,chat,text)
 		}
+
+		console.log(callback_query)
 
 		if (!text) {
 
