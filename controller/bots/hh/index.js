@@ -1003,7 +1003,7 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 		let water_text = '入款（' + count_in + '笔）：\n'+ water_in.join('\n') + '\n\n出款（' + count_out + '笔）：\n' + water_out.join('\n') + '\n\n费率：' + charge + '\n' + rate_array.join('\n') + '\n总入款：' + in_total + '人民币\n应下发：' + out_should_array.join(' | ') + '\n总下发：' + out_total_array.join(' | ') + '\n余下发：' + out_need_array.join(' | ')
 
-		await API.sendMessage(token, { chat_id: cid, parse_mode: 'HTML', text: water_text })
+		await API.sendMessage(token, { chat_id: cid, parse_mode: 'HTML', text: water_text, reply_markup: { inline_keyboard: [ [ { text:'获取完整账单', callback_data:'/bill' } ] ] } })
 
 	}catch(err){
 
