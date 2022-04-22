@@ -903,9 +903,9 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 		let water_out = []
 
-		let count_in = 0
+		let count_in = await db_hh_water.count({ cid, io:'i', created_at: { $gte: start, $lt: end } })
 
-		let count_out = 0
+		let count_out = await db_hh_water.count({ cid, io:'o', created_at: { $gte: start, $lt: end } })
 
 		let in_total = 0
 
@@ -916,8 +916,6 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 		for (let i = water.length - 1; i >= 0; i--) {
 
 			if (water[i].io==='i') {
-
-				count_in++
 
 				let money_i = 0
 
@@ -940,8 +938,6 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 			}
 
 			if (water[i].io==='o') {
-
-				count_out++
 
 				let money_o = 0
 
