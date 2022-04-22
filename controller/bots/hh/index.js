@@ -1167,32 +1167,32 @@ module.exports = {
 			await setRate(token,message_id,from,chat,currency,rate)
 		}
 
-		else if (/^下发(\d+\.{0,1}\d*)(.*)$/.test(text)||/^\-(\d+\.{0,1}\d*)(.*)$/.test(text)) {
+		else if (/^下发(-{0,1}\d+\.{0,1}\d*)(.*)$/.test(text)||/^\-(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
 			let data = text.match(/^\-(\d+\.{0,1}\d*)(.*)$/)
 
-			if (/^下发(\d+\.{0,1}\d*)(.*)$/.test(text)) {
+			if (/^下发(-{0,1}\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-				data = text.match(/^下发(\d+\.{0,1}\d*)(.*)$/)
+				data = text.match(/^下发(-{0,1}\d+\.{0,1}\d*)(.*)$/)
 			}
 
-			const money = data[1]
+			const money = Number(data[1])
 
 			const currency = data[2]?CURRENCYCODE[data[2]]:'CNY'
 
 			await setWater(token,message_id,from,chat,money,currency,'o')
 		}
 
-		else if (/^入款(\d+\.{0,1}\d*)(.*)$/.test(text)||/^\+(\d+\.{0,1}\d*)(.*)$/.test(text)) {
+		else if (/^入款(-{0,1}\d+\.{0,1}\d*)(.*)$/.test(text)||/^\+(\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
 			let data = text.match(/^\+(\d+\.{0,1}\d*)(.*)$/)
 
-			if (/^入款(\d+\.{0,1}\d*)(.*)$/.test(text)) {
+			if (/^入款(-{0,1}\d+\.{0,1}\d*)(.*)$/.test(text)) {
 
-				data = text.match(/^入款(\d+\.{0,1}\d*)(.*)$/)
+				data = text.match(/^入款(-{0,1}\d+\.{0,1}\d*)(.*)$/)
 			}
 
-			const money = data[1]
+			const money = Number(data[1])
 
 			const currency = data[2]?CURRENCYCODE[data[2]]:'CNY'
 

@@ -1,11 +1,11 @@
-const text = process.argv[2]
+// const text = process.argv[2]
 
-if (/^添加管理(.+)/.test(text)) {
+// if (/^添加管理(.+)/.test(text)) {
 	
-	const found = text.match(/^添加管理(.+)/)
+// 	const found = text.match(/^添加管理(.+)/)
 
-	console.log(found[1])
-}
+// 	console.log(found[1])
+// }
 
 // ================================
 
@@ -51,16 +51,16 @@ if (/^添加管理(.+)/.test(text)) {
 
 // ================================
 
-// const rule = /^入款(\d+\.{0,1}\d*)(.*)$/
+const rule = /^入款(-{0,1}\d+\.{0,1}\d*)(.*)$/
 
-// const text = process.argv[2]
+const text = process.argv[2]
 
-// if (rule.test(text)) {
+if (rule.test(text)) {
 	
-// 	const found = text.match(rule)
+	const found = text.match(rule)
 
-// 	console.log(Number(found[1]),found[2])
-// }
+	console.log(Number(found[1]),found[2])
+}
 
 // ================================
 
