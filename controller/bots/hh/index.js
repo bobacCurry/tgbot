@@ -884,18 +884,7 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 	try{
 
-		let limit = 5
-
-		if (all) {
-
-			limit = 100000
-		}
-
-		const water_i = await db_hh_water.find({ cid, io:'i', created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1, created_at:1 }).limit(limit).sort({ created_at: -1 })
-
-		const water_o = await db_hh_water.find({ cid, io:'o', created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1, created_at:1 }).limit(limit).sort({ created_at: -1 })
-
-		const water = [...water_i,...water_o]
+		const water = await db_hh_water.find({ cid, created_at: { $gte: start, $lt: end } },{ name:1, currency:1, money:1, io:1, created_at:1 })
 
 		const config  = await db_hh_config.findOne({ cid })
 
@@ -903,9 +892,9 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 		let water_out = []
 
-		let count_in = await db_hh_water.countDocuments({ cid, io:'i', created_at: { $gte: start, $lt: end } })
+		let count_in = 0
 
-		let count_out = await db_hh_water.countDocuments({ cid, io:'o', created_at: { $gte: start, $lt: end } })
+		let count_out = 0
 
 		let in_total = 0
 
@@ -918,6 +907,8 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 			if (water[i].io==='i') {
 
 				let money_i = 0
+
+				count_in++
 
 				water_in.push(`<code>${moment(water[i].created_at).format('HH:mm:ss')}</code> ${water[i].money} ${CURRENCYLIST[water[i].currency]}`)
 
@@ -940,6 +931,8 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 			if (water[i].io==='o') {
 
 				let money_o = 0
+
+				count_out++
 
 				water_out.push(`<code>${moment(water[i].created_at).format('HH:mm:ss')}</code> ${water[i].money} ${CURRENCYLIST[water[i].currency]}`).toFixed(point)
 
@@ -999,6 +992,13 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 				out_need_array.push(`${(out_need*_rate).toFixed(point)}${CURRENCYLIST[currency]}`)
 			}
+		}
+
+		if (!all) {
+
+			water_in = water_in.slice(0,5)
+
+			water_out = water_out.slice(0,5)
 		}
 
 		let water_text = '入款（' + count_in + '笔）：\n'+ water_in.join('\n') + '\n\n出款（' + count_out + '笔）：\n' + water_out.join('\n') + '\n\n费率：' + charge + '\n' + rate_array.join('\n') + '\n总入款：' + in_total + '人民币\n应下发：' + out_should_array.join(' | ') + '\n总下发：' + out_total_array.join(' | ') + '\n余下发：' + out_need_array.join(' | ')
