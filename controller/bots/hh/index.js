@@ -1065,6 +1065,10 @@ module.exports = {
 
 		const { update_id, message: { message_id, from, chat, text, entities, new_chat_member }, callback_query } = req.body
 
+		console.log(req.body)
+
+		return res.send('true')
+
 		if (new_chat_member&&(BOTLIST.indexOf(new_chat_member.username)!==-1)) {
 
 			await db_hh_config.deleteMany({ cid: chat.id })
@@ -1077,8 +1081,6 @@ module.exports = {
 
 			await help(token,message_id,from,chat,text)
 		}
-
-		console.log(callback_query)
 
 		if (!text) {
 
