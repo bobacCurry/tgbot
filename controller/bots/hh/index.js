@@ -903,9 +903,9 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 		let water_out = []
 
-		let count_in = await db_hh_water.count({ cid, io:'i', created_at: { $gte: start, $lt: end } })
+		let count_in = await db_hh_water.countDocuments({ cid, io:'i', created_at: { $gte: start, $lt: end } })
 
-		let count_out = await db_hh_water.count({ cid, io:'o', created_at: { $gte: start, $lt: end } })
+		let count_out = await db_hh_water.countDocuments({ cid, io:'o', created_at: { $gte: start, $lt: end } })
 
 		let in_total = 0
 
