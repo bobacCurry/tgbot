@@ -1067,7 +1067,14 @@ module.exports = {
 
 		console.log(req.body)
 
-		return res.send('true')
+		if (callback_query&&callback_query.message&&callback_query.data==='/bill') {
+
+			const { message_id, from, chat } = callback_query.message
+
+			await getWater(token,message_id,from,chat,'',true)
+
+			return res.send('true')
+		}
 
 		const { message_id, from, chat, text, entities, new_chat_member } = message
 
