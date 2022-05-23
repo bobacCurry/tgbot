@@ -638,6 +638,13 @@ const setCharge = async (token,message_id,from,chat,charge) => {
 		return false
 	}
 
+	if (Number(charge)>100) {
+
+		await API.sendMessage(token, { chat_id: cid, text: '⚠️操作失败，费率超过范围' })
+
+		return false
+	}
+
 	try{
 
 		const chat = await db_hh_config.findOne({ cid })
@@ -956,7 +963,7 @@ const getWater = async (token,message_id,from,chat,text,all=false) => {
 
 		const charge = config.charge
 
-		const out_should = in_total*100/(100+charge)
+		const out_should = in_total*(100-charge)
 
 		const out_need = out_should - out_total
 
