@@ -4,7 +4,7 @@ const router = express.Router()
 
 const hh = require('../controller/bots/hh/index.js')
 
-const admin = require('../controller/bots/hh/index.js')
+const admin = require('../controller/bots/admin/index.js')
 
 router.post('/hh/:token', hh.index)
 
