@@ -2,8 +2,12 @@ const express = require('express')
 
 const router = express.Router()
 
-const bots = require('../controller/bots/hh/index.js')
+const hh = require('../controller/bots/hh/index.js')
 
-router.post('/hh/:token', bots.index)
+const admin = require('../controller/bots/hh/index.js')
+
+router.post('/hh/:token', hh.index)
+
+router.post('/admin/:token', admin.index)
 
 module.exports = router
