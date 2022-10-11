@@ -26,8 +26,6 @@ let admin_push = schedule.scheduleJob('*/5 * * * * *', async () => {
 
 		const nowtime = (new Date()).getTime()
 
-		console.log(nowtime)
-
 		const push = await db_admin_index.findOne({ minute: { $gt: 0 }, nexttime: { $lt: nowtime } })
 
 		if(push){
@@ -35,8 +33,6 @@ let admin_push = schedule.scheduleJob('*/5 * * * * *', async () => {
 			const { _id, token, from_chat_id, chat_id, message_id, minute } = push
 
 			const nexttime = nowtime + minute*60*1000
-
-			console.log(nexttime)
 
 			await db_admin_index.updateOne({ _id }, { nexttime })
 
