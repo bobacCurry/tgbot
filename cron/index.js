@@ -32,11 +32,11 @@ let admin_push = schedule.scheduleJob('*/5 * * * * *', async () => {
 
 		if(push){
 
-			const { token, from_chat_id, chat_id, message_id, minute } = push
+			const { _id, token, from_chat_id, chat_id, message_id, minute } = push
 
 			const nexttime = nowtime+minute*1000
 
-			await db_admin_index.updateOne({ nexttime })
+			await db_admin_index.updateOne({ _id }, { nexttime })
 
 			await API.forwardMessage(token, { from_chat_id, chat_id, message_id })
 		}
