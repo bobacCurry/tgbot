@@ -46,6 +46,12 @@ module.exports = {
 
 		return axios.get(api,{params})
 	},
+	forwardMessage: (bot,params = {}) => {
+
+		const api = host + bot + '/forwardMessage'
+
+		return axios.get(api,{params})
+	},
 	sendPhoto: (bot,params = {}) => {
 
 		const api = host + bot + '/sendPhoto'
