@@ -59,12 +59,10 @@ module.exports = {
 
 			}else{
 
-				await db_admin_index.create({ chat_id: group, from_chat_id: chat.id, message_id, minute })
+				await db_admin_index.create({ token, chat_id: group, from_chat_id: chat.id, message_id, minute })
 			}
 
-			await API.sendMessage(token, { chat_id: chat.id, text: '✅自动广告已添加' })
-
-			// await API.forwardMessage(token, { chat_id: group, from_chat_id: chat.id, message_id })
+			await API.sendMessage(token, { chat_id: chat.id, text: '✅自动广告已更新' })
 
 			return res.send('true')
 
