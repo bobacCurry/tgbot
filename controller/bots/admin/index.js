@@ -45,7 +45,7 @@ module.exports = {
 			return res.send('true')
 		}
 
-		const { message_id, chat } = message.reply_to_message,message
+		const { message_id, chat } = message.reply_to_message
 
 		console.log(command,group,minute,message_id,chat)
 
