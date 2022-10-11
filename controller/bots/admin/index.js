@@ -8,21 +8,23 @@ module.exports = {
 
 	index: async (req, res, next) =>{
 
+		const token = req.params.token
+
+		const { message } = req.body
+
+		if(!message.reply_to_message){
+
+			return res.send('true')
+		}
+
+		if(!message.text){
+
+			return res.send('true')
+		}
+
+		const { message_id, chat } = message.reply_to_message
+
 		try{
-
-			const token = req.params.token
-
-			const { message } = req.body
-
-			if(!message.reply_to_message){
-
-				return res.send('true')
-			}
-
-			if(!message.text){
-
-				return res.send('true')
-			}
 
 			const text_arr = message.text.split(' ')
 
@@ -42,7 +44,10 @@ module.exports = {
 
 			const { data: chat_info } = await API.getChat(token, { chat_id: group })
 
-			console.log(chat_info)
+			if(chat_info){
+
+				await API.sendMessage(token, { chat_id: chat.id, text: '自动广告已添加' })
+			}
 
 			return res.send('true')
 
@@ -53,19 +58,20 @@ module.exports = {
 				return res.send('true')
 			}
 
-			const { message_id, chat } = message.reply_to_message
-
 			await db_admin_index.create({ chat_id: group, from_chat_id: chat.id, message_id, minute })
 
-			await API.sendMessage(token, { chat_id: chat.id, text: '自动广告已添加' })
+			await API.sendMessage(token, { chat_id: chat.id, text: '✅自动广告已添加' })
 
 			// await API.forwardMessage(token, { chat_id: group, from_chat_id: chat.id, message_id })
 
 			return res.send('true')
 
-		}catch(e){
+		}catch({ response }){
 
-			console.log(e)
+			if(response.data&&(response.data.error_code==400)){
+
+				await API.sendMessage(token, { chat_id: chat.id, text: '❌转发群组不存在' })
+			}
 
 			return res.send('true')
 		}
