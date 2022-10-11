@@ -26,8 +26,6 @@ module.exports = {
 
 		const command = text_arr[0]
 
-		console.log(command)
-
 		if(!command||(command.indexOf('/add_group')===-1)){
 
 			return res.send('true')
@@ -35,16 +33,18 @@ module.exports = {
 
 		const group = text_arr[1]
 
-		console.log(group)
-
 		if(!group||(group.indexOf('@')===-1)){
 
 			return res.send('true')
 		}
 
-		const minute = text_arr[2]
+		const chat_info = await API.getChat(token, { chat_id: group })
 
-		console.log(minute)
+		console.log(chat_info)
+
+		return res.send('true')
+
+		const minute = text_arr[2]
 
 		if(!minute||isNaN(minute)){
 
@@ -53,9 +53,11 @@ module.exports = {
 
 		const { message_id, chat } = message.reply_to_message
 
-		console.log(command,group,minute,message_id,chat)
+		await db_admin_index.create({ chat_id: group, from_chat_id: chat.id, message_id, minute })
 
-		await API.forwardMessage(token, { chat_id: group, from_chat_id: chat.id, message_id })
+		await API.sendMessage(token, { chat_id: chat.id, text: '自动广告已添加' })
+
+		// await API.forwardMessage(token, { chat_id: group, from_chat_id: chat.id, message_id })
 
 		return res.send('true')
 	}

@@ -4,11 +4,13 @@ const Schema = mongoose.Schema
 
 const Index = new Schema({
 
-	username: { type: String, default: '' },
+	from_chat_id: { type: String, require: true, index: true },
 
-	chatname: { type: String, require: true, index: true },
+	chat_id: { type: String, require: true, index: true },
 
 	message_id: { type: String, default: '' },
+
+	minute: { type: Number, default: 0 },
 
 	created_at: { type: Date },
 
