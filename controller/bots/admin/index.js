@@ -42,14 +42,7 @@ module.exports = {
 				return res.send('true')
 			}
 
-			const { data: chat_info } = await API.getChat(token, { chat_id: group })
-
-			if(chat_info){
-
-				await API.sendMessage(token, { chat_id: chat.id, text: '自动广告已添加' })
-			}
-
-			return res.send('true')
+			await API.getChat(token, { chat_id: group })
 
 			const minute = text_arr[2]
 
