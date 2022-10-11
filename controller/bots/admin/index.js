@@ -46,7 +46,7 @@ module.exports = {
 
 			const minute = text_arr[2]
 
-			if(!minute||isNaN(minute)){
+			if(isNaN(minute)){
 
 				return res.send('true')
 			}
