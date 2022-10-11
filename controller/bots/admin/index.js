@@ -51,7 +51,16 @@ module.exports = {
 				return res.send('true')
 			}
 
-			await db_admin_index.create({ chat_id: group, from_chat_id: chat.id, message_id, minute })
+			const exies = await db_admin_index.findOne({ chat_id: group })
+
+			if(exies){
+
+				await db_admin_index.updateOne({ chat_id: group }, { from_chat_id: chat.id, message_id, minute })
+
+			}else{
+
+				await db_admin_index.create({ chat_id: group, from_chat_id: chat.id, message_id, minute })
+			}
 
 			await API.sendMessage(token, { chat_id: chat.id, text: '✅自动广告已添加' })
 
