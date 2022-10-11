@@ -26,6 +26,8 @@ module.exports = {
 
 		const command = text_arr[0]
 
+		console.log(command)
+
 		if(!command||(command.indexOf('/add_group')===-1)){
 
 			return res.send('true')
@@ -33,12 +35,16 @@ module.exports = {
 
 		const group = text_arr[1]
 
+		console.log(group)
+
 		if(!group||(group.indexOf('@')===-1)){
 
 			return res.send('true')
 		}
 
 		const minute = text_arr[2]
+
+		console.log(minute)
 
 		if(!minute||isNaN(minute)){
 
