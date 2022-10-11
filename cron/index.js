@@ -34,7 +34,7 @@ let admin_push = schedule.scheduleJob('*/5 * * * * *', async () => {
 
 			const { _id, token, from_chat_id, chat_id, message_id, minute } = push
 
-			const nexttime = nowtime+minute*1000
+			const nexttime = nowtime + minute*60*1000
 
 			console.log(nexttime)
 
