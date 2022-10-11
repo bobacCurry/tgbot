@@ -10,7 +10,17 @@ module.exports = {
 
 		const { message } = req.body
 
-		console.log(message)
+		if(!message.reply_to_message){
+
+			return res.send('true')
+		}
+
+		if(!message.text){
+
+			return res.send('true')
+		}
+
+		console.log(message.reply_to_message,message.text)
 
 		return res.send('true')
 	}
