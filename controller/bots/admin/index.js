@@ -40,7 +40,7 @@ module.exports = {
 				return res.send('true')
 			}
 
-			const chat_info = await API.getChat(token, { chat_id: group })
+			const { data: chat_info } = await API.getChat(token, { chat_id: group })
 
 			console.log(chat_info)
 
