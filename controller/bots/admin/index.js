@@ -51,11 +51,11 @@ module.exports = {
 				return res.send('true')
 			}
 
-			const exies = await db_admin_index.findOne({ chat_id: group })
+			const exies = await db_admin_index.findOne({ chat_id: group, from_chat_id: chat.id, message_id })
 
 			if(exies){
 
-				await db_admin_index.updateOne({ chat_id: group }, { from_chat_id: chat.id, message_id, minute })
+				await db_admin_index.updateOne({ chat_id: group }, { minute })
 
 			}else{
 
