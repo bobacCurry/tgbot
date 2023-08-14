@@ -35,14 +35,10 @@ const main = async () => {
 
 		const { data } = await axios.post(`${botUrl}${token}/setWebhook`,form)
 
-		console.log(data)
-
 		process.exit(1)
 
 	}catch(err){
 
-		console.log(err)
-		
 		process.exit(1)
 	}
 }
